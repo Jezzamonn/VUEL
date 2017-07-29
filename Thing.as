@@ -11,7 +11,7 @@
 		// In terms of the grid (?)
 		public var x:int;
 		public var y:int;
-		
+
 		// x y pairs
 		public var moves:Array;
 
@@ -21,16 +21,13 @@
 		public var disabled:Boolean = false;
 		public var showMoves:Boolean = false;
 
+		public var renderOffset:int = 1;
+
 		public function Thing(level:Level) {
 			this.level = level;
 
 			moves = [
 				{x: 0, y: 0},
-
-				{x: -1, y:  0},
-				{x:  1, y:  0},
-				{x:  0, y: -1},
-				{x:  0, y:  1}
 			];
 		}
 
@@ -68,10 +65,10 @@
 		}
 		
 		public function render(context:BitmapData):void {
+			renderSelf(context);
 			if (active || showMoves) {
 				renderMoves(context);
 			}
-			renderSelf(context);
 		}
 
 		public function renderSquare(context:BitmapData, x:int, y:int, color:int, edge:int = 0):void {
@@ -88,13 +85,21 @@
 
 		public function renderSelf(context:BitmapData):void {
 			//renderSquare(context, x, y, 0x990099, 1);
-			context.copyPixels(Player.image, new Rectangle(0, 20, 20, 20), new Point(x * Level.GRID_SIZE, y * Level.GRID_SIZE), null, null, true);
+			context.copyPixels(
+				Player.image,
+				new Rectangle(20 * renderOffset, 0, 20, 20),
+				new Point(x * Level.GRID_SIZE, y * Level.GRID_SIZE),
+				null, null, true);
 		}
 
 		public function renderMoves(context:BitmapData):void {
+			var rect:Rectangle = new Rectangle(20, 0, 20, 20);
+			var point:Point = new Point();
 			for each (var move:* in moves) {
 				if (level.validSquare(x + move.x, y + move.y)) {
-					renderSquare(context, x + move.x, y + move.y, 0xFF00FF, 3)
+					point.x = (x + move.x) * Level.GRID_SIZE;
+					point.y = (y + move.y) * Level.GRID_SIZE;
+					context.copyPixels(Level.misc, rect, point, null, null, true);
 				}
 			}
 		}

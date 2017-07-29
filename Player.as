@@ -18,6 +18,7 @@
 		public function Player(level:Level) {
 			super(level);
 
+			renderOffset = 0;
 
 			moves = [
 				{x:  0, y:  0},
@@ -34,16 +35,14 @@
 			]
 		}
 
-		
-		public override function renderSelf(context:BitmapData):void {
-			//renderSquare(context, x, y, 0x009900, 1);
-			context.copyPixels(image, new Rectangle(0, 0, 20, 20), new Point(x * Level.GRID_SIZE, y * Level.GRID_SIZE), null, null, true);
-		}
-
 		public override function renderMoves(context:BitmapData):void {
+			var rect:Rectangle = new Rectangle(0, 0, 20, 20);
+			var point:Point = new Point();
 			for each (var move:* in moves) {
 				if (level.validSquare(x + move.x, y + move.y)) {
-					renderSquare(context, x + move.x, y + move.y, 0x00FF00, 3)
+					point.x = (x + move.x) * Level.GRID_SIZE;
+					point.y = (y + move.y) * Level.GRID_SIZE;
+					context.copyPixels(Level.misc, rect, point, null, null, true);
 				}
 			}
 		}

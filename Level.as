@@ -15,6 +15,15 @@
 			}
 			return _tiles;
 		}
+		[Embed(source = "graphics/misc.png")]
+		private static const MISC_CLASS:Class;
+		private static var _misc:BitmapData;
+		public static function get misc():BitmapData {
+			if (!_misc) {
+				_misc = (new MISC_CLASS()).bitmapData;
+			}
+			return _misc;
+		}
 
 
 		public static const GRID_SIZE:int = 20;
@@ -75,16 +84,22 @@
 
 					if (Rndm.boolean(0.7)) {
 						map[y][x] = 1;
-					}
-
-					if (Rndm.boolean(0.2)) {
-						addThing(new Enemy(this), x, y);
+						if (Rndm.boolean(0.1)) {
+							addThing(Enemy.randomEnemy(this), x, y);
+						}
 					}
 				}
 			}
 			
 			player = new Player(this); 
-			addThing(player, Rndm.integer(WIDTH), Rndm.integer(HEIGHT));
+			var playerX:int = 0;
+			var playerY:int = 0;
+			do {
+				playerX = Rndm.integer(WIDTH);
+				playerY = Rndm.integer(HEIGHT);
+			}
+			while (!validSquare(playerX, playerY));
+			addThing(player, playerX, playerY);
 			activeThing = player;
 		}
 

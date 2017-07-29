@@ -1,6 +1,21 @@
 ﻿package  {
+
+	import com.gskinner.utils.Rndm;
 	
 	public class Enemy extends Thing {
+
+		public static function randomEnemy(level:Level):Enemy {
+			var classes:Array = [
+				Battery,
+				Lamp,
+				Tv,
+				Toaster,
+				Roomba,
+				Duck
+			];
+			var clazz:Class = RndmUtil.pickRandom(classes);
+			return new clazz(level);
+		}
 
 		public function Enemy(level:Level) {
 			super(level);
