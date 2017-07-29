@@ -8,6 +8,8 @@
 	import flash.geom.Point;
 	import flash.display.StageScaleMode;
 	import flash.display.StageAlign;
+	import flash.events.KeyboardEvent;
+	import flash.ui.Keyboard;
 	
 	
 	public class Main extends MovieClip {
@@ -36,6 +38,7 @@
 			stage.addEventListener(Event.RESIZE, onResize);
 			stage.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 			stage.addEventListener(MouseEvent.CLICK, onClick);
+			stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 		}
 		
 		public function onResize(evt:Event = null):void {
@@ -69,6 +72,14 @@
 			mousePoint = bitmap.globalToLocal(mousePoint);
 			
 			level.onMouseMove(mousePoint.x, mousePoint.y);
+		}
+
+		public function onKeyDown(evt:KeyboardEvent):void {
+			switch (evt.keyCode) {
+				case Keyboard.R:
+					level.regen();
+					break;
+			}
 		}
 	}
 	

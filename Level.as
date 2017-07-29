@@ -28,8 +28,11 @@
 
 		public static const GRID_SIZE:int = 20;
 		
-		public static const WIDTH:int = 10;
-		public static const HEIGHT:int = 10;
+		public static const WIDTH:int = 9;
+		public static const HEIGHT:int = 9;
+
+		public var camX:Number;
+		public var camY:Number;
 		
 		public var map:Array;
 		public var thingMap:Array;
@@ -45,13 +48,18 @@
 		}
 
 		public function set activeIndex(value:int):void {
-			activeThing.active = false;
+			if (activeThing) {
+				activeThing.active = false;
+			}
 			_activeIndex = value % things.length;
 			if (_activeIndex < 0) _activeIndex += things.length;
 			activeThing.active = true;
 		}
 
 		public function get activeThing():Thing {
+			if (activeIndex > things.length) {
+				return null;
+			}
 			return things[activeIndex];
 		};
 
@@ -71,6 +79,10 @@
 
 		public function Level() {
 			// constructor code
+			regen();
+		}
+
+		public function regen():void {
 			map = [];
 			thingMap = [];
 			things = [];
@@ -224,6 +236,12 @@
 			}
 		}
 
+		public function render(context:BitmapData, xOffset:int = 0, yOffset:int = 0):void {
+			context.fillRect(context.rect, 0);
+			renderBg(context, xOffset, yOffset);
+			renderThings(context, xOffset, yOffset);
+		}
+		
 		public function renderThings(context:BitmapData, xOffset:int = 0, yOffset:int = 0):void {
 			for each (var thing:* in things) {
 				thing.render(context);
@@ -236,17 +254,11 @@
 			//	}
 			//}
 		}
-
-		public function render(context:BitmapData, xOffset:int = 0, yOffset:int = 0):void {
-			renderBg(context, xOffset, yOffset);
-			renderThings(context, xOffset, yOffset);
-		}
-		
 		public function renderBg(context:BitmapData, xOffset:int = 0, yOffset:int = 0):void {
 			var rect:Rectangle = new Rectangle(0, 0, 20, 23);
 			var point:Point = new Point();
 			for (var y:int = 0; y < HEIGHT; y ++) {
-				point.y = y * GRID_SIZE - 1;
+				point.y = y * GRID_SIZE;
 				for (var x:int = 0; x < WIDTH; x ++) {
 					point.x = x * GRID_SIZE;
 
