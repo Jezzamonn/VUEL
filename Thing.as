@@ -39,7 +39,7 @@
 
 				var move:Object = movesCopy[rIndex];
 				if (level.validSquare(x + move.x, y + move.y)) {
-					level.setThingPos(this, x + move.x, y + move.y);
+					moveTo(x + move.x, y + move.y);
 					return;
 				}
 				else {
@@ -47,6 +47,22 @@
 				}
 			}
 			trace("can't move :)")
+		}
+		
+		public function moveTo(x:int, y:int):void {
+			level.setThingPos(this, x, y);
+		}
+		
+		public function canMoveTo(x:int, y:int):Boolean {
+			if (!level.validSquare(x, y)) {
+				return false;
+			}
+			for each (var move:* in moves) {
+				if (this.x + move.x == x && this.y + move.y == y) {
+					return true;
+				}
+			}
+			return false;
 		}
 		
 		public function render(context:BitmapData):void {

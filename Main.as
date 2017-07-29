@@ -4,6 +4,8 @@
 	import flash.display.BitmapData;
 	import flash.display.Bitmap;
 	import flash.events.Event;
+	import flash.events.MouseEvent;
+	import flash.geom.Point;
 	
 	
 	public class Main extends MovieClip {
@@ -25,10 +27,10 @@
 			
 			level = new Level();
 			
-			addEventListener(Event.ENTER_FRAME, onEnterFrame);
-
 			onResize();
 			stage.addEventListener(Event.RESIZE, onResize);
+			stage.addEventListener(Event.ENTER_FRAME, onEnterFrame);
+			stage.addEventListener(MouseEvent.CLICK, onClick);
 		}
 		
 		public function onResize(evt:Event = null):void {
@@ -46,6 +48,13 @@
 			level.update();
 
 			level.render(bitmapData);
+		}
+		
+		public function onClick(evt:MouseEvent):void {
+			var mousePoint:Point = new Point(evt.stageX, evt.stageY);
+			mousePoint = bitmap.globalToLocal(mousePoint);
+			
+			level.onMouseDown(mousePoint.x, mousePoint.y);
 		}
 	}
 	

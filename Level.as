@@ -35,10 +35,11 @@
 		};
 
 		public var count:int = 0;
-		public var state:int = 0;
+		public var state:int = STATE_MOVE;
 
 		public static const STATE_IDLE:int = 0;
-		public static const STATE_PICK_MOVE:int = 1;
+		public static const STATE_MOVE:int = 1;
+		public static const STATE_ANIM:int = 2;
 
 		public function Level() {
 			// constructor code
@@ -63,7 +64,8 @@
 				}
 			}
 			
-			addThing(new Player(this), Rndm.integer(WIDTH), Rndm.integer(HEIGHT));
+			player = new Player(this); 
+			addThing(player, Rndm.integer(WIDTH), Rndm.integer(HEIGHT));
 		}
 
 		public function validSquare(x:int, y:int):Boolean {
@@ -108,10 +110,26 @@
 
 		public function update():void {
 			count ++;
-			if (count > 0) {
-				activeThing.move();
-				activeIndex ++;
-				count = 0;
+			switch (state) {
+				case STATE_IDLE:
+					// nothing?
+					break;
+				case STATE_MOVE:
+					// pick ya move
+					if (activeThing == player) {
+						// pick the player move
+					}
+					else {
+						if (count > 4) {
+							activeThing.move();
+							activeIndex ++;
+							count = 0;
+						}
+					}
+					break;
+				case STATE_ANIM:
+					// wait for anim?
+					break;
 			}
 		}
 
@@ -129,6 +147,15 @@
 					var color:int = map[y][x] ? 0xFFFFFF : 0;
 					context.fillRect(rect, color);
 				}
+			}
+		}
+		
+		public function onMouseDown(x:Number, y:Number):void {
+			var gridX:int = Math.floor(x / GRID_SIZE);
+			var gridY:int = Math.floor(y / GRID_SIZE);
+			
+			if (state == STATE_MOVE && activeThing == player && player.canMoveTo(gridX, gridY)) {
+				player.moveTo(gridX, gridY)
 			}
 		}
 
