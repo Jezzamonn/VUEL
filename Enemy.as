@@ -23,7 +23,7 @@
 					bestMove = move;
 				}
 			}
-			trace(bestDist);
+			//trace(bestDist);
 			if (bestMove) {
 				moveTo(x + bestMove.x, y + bestMove.y);
 			}

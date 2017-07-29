@@ -34,6 +34,11 @@
 			return things[activeIndex];
 		};
 
+		public function set activeThing(value:Thing):void {
+			// better not be -1 you jerk
+			activeIndex = things.indexOf(value);
+		}
+
 		public var count:int = 0;
 		public var state:int = STATE_MOVE;
 
@@ -66,6 +71,7 @@
 			
 			player = new Player(this); 
 			addThing(player, Rndm.integer(WIDTH), Rndm.integer(HEIGHT));
+			activeThing = player;
 		}
 
 		public function validSquare(x:int, y:int):Boolean {
@@ -81,7 +87,7 @@
 				return false;
 			}
 			if (ignore == null) ignore = [];
-			
+
 			for each (var thing:* in ignore) {
 				if (thingMap[y][x] == thing) {
 					return false;
