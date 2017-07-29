@@ -45,6 +45,8 @@
 		}
 
 		public function onEnterFrame(evt:Event):void {
+			onMouseMove();
+
 			level.update();
 
 			level.render(bitmapData);
@@ -55,6 +57,13 @@
 			mousePoint = bitmap.globalToLocal(mousePoint);
 			
 			level.onMouseDown(mousePoint.x, mousePoint.y);
+		}
+
+		public function onMouseMove(evt:Event = null):void {
+			var mousePoint:Point = new Point(stage.mouseX, stage.mouseY);
+			mousePoint = bitmap.globalToLocal(mousePoint);
+			
+			level.onMouseMove(mousePoint.x, mousePoint.y);
 		}
 	}
 	

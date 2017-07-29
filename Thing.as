@@ -19,6 +19,7 @@
 
 		public var active:Boolean = false;
 		public var disabled:Boolean = false;
+		public var showMoves:Boolean = false;
 
 		public function Thing(level:Level) {
 			this.level = level;
@@ -67,7 +68,7 @@
 		}
 		
 		public function render(context:BitmapData):void {
-			if (active) {
+			if (active || showMoves) {
 				renderMoves(context);
 			}
 			renderSelf(context);

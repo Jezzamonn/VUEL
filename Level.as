@@ -51,6 +51,8 @@
 			activeIndex = things.indexOf(value);
 		}
 
+		public var mouseOvered:Thing = null;
+
 		public var count:int = 0;
 		public var state:int = STATE_MOVE;
 
@@ -86,6 +88,21 @@
 			activeThing = player;
 		}
 
+		public function getTileAt(x:int, y:int):int {
+			if (x < 0 || y < 0 || x >= WIDTH || y >= HEIGHT) {
+				return 0;
+			}
+			return map[y][x];
+		}
+
+		public function getThingAt(x:int, y:int):Thing {
+			if (x < 0 || y < 0 || x >= WIDTH || y >= HEIGHT) {
+				return null;
+			}
+			return thingMap[y][x];
+		}
+
+		
 		public function validSquare(x:int, y:int):Boolean {
 			if (x < 0 || y < 0 || x >= WIDTH || y >= HEIGHT) {
 				return false;
@@ -166,13 +183,6 @@
 			}
 		}
 
-		public function getTileAt(x:int, y:int):int {
-			if (x < 0 || y < 0 || x >= WIDTH || y >= HEIGHT) {
-				return 0;
-			}
-			return map[y][x];
-		}
-		
 		public function onMouseDown(x:Number, y:Number):void {
 			var gridX:int = Math.floor(x / GRID_SIZE);
 			var gridY:int = Math.floor(y / GRID_SIZE);
@@ -180,6 +190,22 @@
 			if (state == STATE_MOVE && activeThing == player && player.canMoveTo(gridX, gridY)) {
 				player.moveTo(gridX, gridY);
 				activeIndex ++;
+			}
+		}
+
+		public function onMouseMove(x:Number, y:Number):void {
+			if (mouseOvered) {
+				mouseOvered.showMoves = false;
+			}
+			mouseOvered = null;
+
+			var gridX:int = Math.floor(x / GRID_SIZE);
+			var gridY:int = Math.floor(y / GRID_SIZE);
+
+			var thing:Thing = getThingAt(gridX, gridY);
+			if (thing) {
+				mouseOvered = thing;
+				mouseOvered.showMoves = true;
 			}
 		}
 
