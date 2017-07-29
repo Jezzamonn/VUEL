@@ -43,7 +43,7 @@
 		public override function renderMoves(context:BitmapData):void {
 			for each (var move:* in moves) {
 				if (level.validSquare(x + move.x, y + move.y)) {
-					renderSquare(context, x + move.x, y + move.y, 0xFF00FF, 3)
+					renderSquare(context, x + move.x, y + move.y, 0x00FF00, 3)
 				}
 			}
 		}

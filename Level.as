@@ -51,7 +51,7 @@
 			activeIndex = things.indexOf(value);
 		}
 
-		public var mouseOvered:Thing = null;
+		public var mouseOverred:Thing = null;
 
 		public var count:int = 0;
 		public var state:int = STATE_MOVE;
@@ -194,18 +194,18 @@
 		}
 
 		public function onMouseMove(x:Number, y:Number):void {
-			if (mouseOvered) {
-				mouseOvered.showMoves = false;
+			if (mouseOverred) {
+				mouseOverred.showMoves = false;
 			}
-			mouseOvered = null;
+			mouseOverred = null;
 
 			var gridX:int = Math.floor(x / GRID_SIZE);
 			var gridY:int = Math.floor(y / GRID_SIZE);
 
 			var thing:Thing = getThingAt(gridX, gridY);
 			if (thing) {
-				mouseOvered = thing;
-				mouseOvered.showMoves = true;
+				mouseOverred = thing;
+				mouseOverred.showMoves = true;
 			}
 		}
 

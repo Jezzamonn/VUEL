@@ -6,6 +6,8 @@
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
+	import flash.display.StageScaleMode;
+	import flash.display.StageAlign;
 	
 	
 	public class Main extends MovieClip {
@@ -20,6 +22,9 @@
 		public var level:Level;
 		
 		public function Main() {
+			stage.scaleMode = StageScaleMode.NO_SCALE;
+			stage.align = StageAlign.TOP_LEFT;
+			
 			bitmapData = new BitmapData(WIDTH, HEIGHT, false, 0);
 			bitmap = new Bitmap(bitmapData);
 			
