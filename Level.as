@@ -1,9 +1,21 @@
 ﻿package  {
 	import flash.display.BitmapData;
 	import flash.geom.Rectangle;
+	import flash.geom.Point;
 	import com.gskinner.utils.Rndm;
 	
 	public class Level {
+
+		[Embed(source = "graphics/tiles.png")]
+		private static const TILES_CLASS:Class;
+		private static var _tiles:BitmapData;
+		public static function get tiles():BitmapData {
+			if (!_tiles) {
+				_tiles = (new TILES_CLASS()).bitmapData;
+			}
+			return _tiles;
+		}
+
 
 		public static const GRID_SIZE:int = 20;
 		
@@ -154,21 +166,11 @@
 			}
 		}
 
-		public function render(context:BitmapData, xOffset:int = 0, yOffset:int = 0):void {
-			renderBg(context, xOffset, yOffset);
-			renderThings(context, xOffset, yOffset);
-		}
-		
-		public function renderBg(context:BitmapData, xOffset:int = 0, yOffset:int = 0):void {
-			var rect:Rectangle = new Rectangle(0, 0, GRID_SIZE, GRID_SIZE);
-			for (var y:int = 0; y < HEIGHT; y ++) {
-				rect.y = y * GRID_SIZE;
-				for (var x:int = 0; x < WIDTH; x ++) {
-					rect.x = x * GRID_SIZE;
-					var color:int = map[y][x] ? 0xFFFFFF : 0;
-					context.fillRect(rect, color);
-				}
+		public function getTileAt(x:int, y:int):int {
+			if (x < 0 || y < 0 || x >= WIDTH || y >= HEIGHT) {
+				return 0;
 			}
+			return map[y][x];
 		}
 		
 		public function onMouseDown(x:Number, y:Number):void {
@@ -193,6 +195,35 @@
 			//	}
 			//}
 		}
+
+		public function render(context:BitmapData, xOffset:int = 0, yOffset:int = 0):void {
+			renderBg(context, xOffset, yOffset);
+			renderThings(context, xOffset, yOffset);
+		}
+		
+		public function renderBg(context:BitmapData, xOffset:int = 0, yOffset:int = 0):void {
+			var rect:Rectangle = new Rectangle(0, 0, 20, 23);
+			var point:Point = new Point();
+			for (var y:int = 0; y < HEIGHT; y ++) {
+				point.y = y * GRID_SIZE - 1;
+				for (var x:int = 0; x < WIDTH; x ++) {
+					point.x = x * GRID_SIZE;
+
+					if (getTileAt(x, y)) {
+						if (getTileAt(x, y+1)) {
+							rect.x = 0 * rect.width;
+							rect.y = 0 * rect.height;
+						}
+						else {
+							rect.x = 1 * rect.width;
+							rect.y = 0 * rect.height;
+						}
+						context.copyPixels(tiles, rect, point, null, null, true);
+					}
+				}
+			}
+		}
+
 
 	}
 	

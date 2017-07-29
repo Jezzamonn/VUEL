@@ -20,7 +20,7 @@
 		public var level:Level;
 		
 		public function Main() {
-			bitmapData = new BitmapData(WIDTH, HEIGHT, false, 0xFFFFFF);
+			bitmapData = new BitmapData(WIDTH, HEIGHT, false, 0);
 			bitmap = new Bitmap(bitmapData);
 			
 			addChild(bitmap);

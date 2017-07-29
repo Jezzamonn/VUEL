@@ -18,6 +18,7 @@
 		public var power:int;
 
 		public var active:Boolean = false;
+		public var disabled:Boolean = false;
 
 		public function Thing(level:Level) {
 			this.level = level;
