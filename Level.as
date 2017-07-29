@@ -59,7 +59,7 @@
 					}
 
 					if (Rndm.boolean(0.2)) {
-						addThing(new Thing(this), x, y);
+						addThing(new Enemy(this), x, y);
 					}
 				}
 			}
@@ -73,6 +73,21 @@
 				return false;
 			}
 			return !!map[y][x];
+		}
+
+		// really just has anything but player
+		public function hasEnemy(x:int, y:int, ignore:Array = null):Boolean {
+			if (x < 0 || y < 0 || x >= WIDTH || y >= HEIGHT) {
+				return false;
+			}
+			if (ignore == null) ignore = [];
+			
+			for each (var thing:* in ignore) {
+				if (thingMap[y][x] == thing) {
+					return false;
+				}
+			}
+			return !!thingMap[y][x];
 		}
 
 		public function addThing(thing:Thing, x:int, y:int):void {
@@ -120,11 +135,11 @@
 						// pick the player move
 					}
 					else {
-						if (count > 4) {
+						//if (count > 4) {
 							activeThing.move();
 							activeIndex ++;
 							count = 0;
-						}
+						//}
 					}
 					break;
 				case STATE_ANIM:
