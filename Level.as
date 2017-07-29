@@ -155,7 +155,8 @@
 			var gridY:int = Math.floor(y / GRID_SIZE);
 			
 			if (state == STATE_MOVE && activeThing == player && player.canMoveTo(gridX, gridY)) {
-				player.moveTo(gridX, gridY)
+				player.moveTo(gridX, gridY);
+				activeIndex ++;
 			}
 		}
 
