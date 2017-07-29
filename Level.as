@@ -11,23 +11,28 @@
 		public static const HEIGHT:int = 10;
 		
 		public var map:Array;
-		public var things:Array;
+		public var thingMap:Array;
 
 		public var player:Player;
-		public var activeThings:Array;
-		private var _thingIndex:int = 0;
-		public function get thingIndex():int {
-			return _thingIndex;
+
+		public var things:Array;
+
+		private var _activeIndex:int = 0;
+
+		public function get activeIndex():int {
+			return _activeIndex;
 		}
-		public function set thingIndex(value:int):void {
+
+		public function set activeIndex(value:int):void {
 			activeThing.active = false;
-			_thingIndex = value % activeThings.length;
-			if (_thingIndex < 0) {
-				_thingIndex += activeThings.length;
-			}
+			_activeIndex = value % things.length;
+			if (_activeIndex < 0) _activeIndex += things.length;
 			activeThing.active = true;
 		}
-		public function get activeThing():Thing { return activeThings[thingIndex] };
+
+		public function get activeThing():Thing {
+			return things[activeIndex];
+		};
 
 		public var count:int = 0;
 		public var state:int = 0;
@@ -38,21 +43,21 @@
 		public function Level() {
 			// constructor code
 			map = [];
+			thingMap = [];
 			things = [];
-			activeThings = [];
 
 			for (var y:int = 0; y < HEIGHT; y ++) {
 				map[y] = [];
-				things[y] = [];
+				thingMap[y] = [];
 				for (var x:int = 0; x < WIDTH; x ++) {
 					map[y][x] = 0;
-					things[y][x] = null;
+					thingMap[y][x] = null;
 
-					if (Math.random() < 0.7) {
+					if (Rndm.boolean(0.7)) {
 						map[y][x] = 1;
 					}
 
-					if (Math.random() < 0.2) {
+					if (Rndm.boolean(0.2)) {
 						addThing(new Thing(this), x, y);
 					}
 				}
@@ -61,17 +66,51 @@
 			addThing(new Player(this), Rndm.integer(WIDTH), Rndm.integer(HEIGHT));
 		}
 
+		public function validSquare(x:int, y:int):Boolean {
+			if (x < 0 || y < 0 || x >= WIDTH || y >= HEIGHT) {
+				return false;
+			}
+			return !!map[y][x];
+		}
+
 		public function addThing(thing:Thing, x:int, y:int):void {
 			thing.x = x;
 			thing.y = y;
-			things[y][x] = thing;
-			activeThings.push(thing);
+			if (thingMap[y][x]) {
+				removeThing(thingMap[y][x]);
+			}
+			thingMap[y][x] = thing;
+			things.push(thing);
+		}
+
+		public function removeThing(thing:Thing):void {
+			var index:int = things.indexOf(thing);
+			if (things[index] === player) {
+			}
+			if (activeIndex == index) {
+				activeIndex --;
+			}
+			things.splice(index, 1);
+			if (activeIndex > index) {
+				_activeIndex --;
+			}
+		}
+
+		public function setThingPos(thing:Thing, x:int, y:int):void {
+			if (thingMap[y][x] && thingMap[y][x] !== thing) {
+				removeThing(thingMap[y][x]);
+			}
+			thingMap[thing.y][thing.x] = null;
+			thing.x = x;
+			thing.y = y;
+			thingMap[y][x] = thing;
 		}
 
 		public function update():void {
 			count ++;
-			if (count > 4) {
-				thingIndex ++;
+			if (count > 0) {
+				activeThing.move();
+				activeIndex ++;
 				count = 0;
 			}
 		}
@@ -94,13 +133,16 @@
 		}
 
 		public function renderThings(context:BitmapData, xOffset:int = 0, yOffset:int = 0):void {
-			for (var y:int = 0; y < HEIGHT; y ++) {
-				for (var x:int = 0; x < WIDTH; x ++) {
-					if (things[y][x]) {
-						things[y][x].render(context);
-					}
-				}
+			for each (var thing:* in things) {
+				thing.render(context);
 			}
+			//for (var y:int = 0; y < HEIGHT; y ++) {
+			//	for (var x:int = 0; x < WIDTH; x ++) {
+			//		if (things[y][x]) {
+			//			things[y][x].render(context);
+			//		}
+			//	}
+			//}
 		}
 
 	}

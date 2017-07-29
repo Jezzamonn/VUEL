@@ -1,4 +1,5 @@
 ﻿package  {
+	import com.gskinner.utils.Rndm;
 	import flash.display.BitmapData;
 	import flash.geom.Rectangle;
 	import flash.geom.Point;
@@ -21,15 +22,31 @@
 		public function Thing(level:Level) {
 			this.level = level;
 
-			moves = [{x: 0, y: 0}];
+			moves = [
+				{x: 0, y: 0},
+
+				{x: -1, y:  0},
+				{x:  1, y:  0},
+				{x:  0, y: -1},
+				{x:  0, y:  1}
+			];
 		}
 
 		public function move():void {
-			var move:Object = RndmUtil.pickRandom(moves);
-			x += move.x;
-			y += move.y;
+			var movesCopy:Array = moves.slice();
+			while (movesCopy.length > 0) {
+				var rIndex:int = Rndm.integer(movesCopy.length);
 
-			level.things[y][x] = this;
+				var move:Object = movesCopy[rIndex];
+				if (level.validSquare(x + move.x, y + move.y)) {
+					level.setThingPos(this, x + move.x, y + move.y);
+					return;
+				}
+				else {
+					movesCopy.splice(rIndex, 1);
+				}
+			}
+			trace("can't move :)")
 		}
 		
 		public function render(context:BitmapData):void {
