@@ -24,6 +24,12 @@
 						thing.y = y;
 						map[y][x] = thing;
 					}
+					else if (Math.random() < 0.05) {
+						var player:Player = new Player();
+						player.x = x;
+						player.y = y;
+						map[y][x] = player;
+					}
 				}
 			}
 		}
