@@ -10,7 +10,8 @@
 		public var textBox:TextBox;
 		public var pointsDisplay:TextBox;
 		
-		public var greetingTextTimer:int = 24;
+		public static const PAUSE_LENGTH:int = 4 * Main.SECONDS;
+		public var textPauseTimer:int = PAUSE_LENGTH;
 
 		public function BuyPage(level:Level) {
 			this.level = level;
@@ -34,6 +35,20 @@
 				choices.push(thing);
 			}
 			choices[0].bought = true;
+			choices[1].moves = [
+				{x: 0, y: 0},
+
+				{x:  1, y:  0},
+				{x: -1, y:  0},
+				{x:  0, y:  1},
+				{x:  0, y: -1},
+				
+				{x:  1, y:  1},
+				{x: -1, y:  1},
+				{x:  1, y: -1},
+				{x: -1, y: -1},
+			]
+			choices[1].cost = 20;
 			choices[2].moves = [
 				{x: 0, y: 0},
 
@@ -47,8 +62,35 @@
 				{x: -2, y:  1},
 				{x: -2, y: -1},
 			];
+			choices[2].cost = 50;
+
+			choices[3].moves = [
+				{x: 0, y: 0},
+
+				{x:  0, y:  -1},
+				{x:  0, y:  -2},
+
+				{x:  1, y:  0},
+				{x:  1, y:  1},
+				{x:  1, y:  2},
+
+				{x: -1, y:  0},
+				{x: -1, y:  1},
+				{x: -1, y:  2},
+			];
+			choices[3].cost = 60;
+
+			// DEBUG:
+			for each (var choice:* in choices) {
+				choice.cost /= 10;
+			}
 
 			setText("Interested in purchasing a new robot?")
+		}
+
+		public function start():void {
+			// this is called before total points is updated.
+			pointsDisplay.textField.text = "$" + level.points + " + $" + level.totalPoints;
 		}
 
 		public function setText(value:String):void {
@@ -57,9 +99,12 @@
 		}
 		
 		public function update():void {
-			greetingTextTimer --;
+			textPauseTimer --;
 			for each (var choice:* in choices) {
 				choice.update();
+			}
+			if (textPauseTimer <= 0) {
+				pointsDisplay.textField.text = "$" + level.totalPoints;
 			}
 		}
 		
@@ -91,8 +136,21 @@
 				}
 			}
 			
-			level.player.moves = selectedThing.moves;
-			level.state = Level.STATE_MOVE;
+			if (selectedThing) {
+				// do the buy
+				if (level.totalPoints >= selectedThing.cost) {
+					level.totalPoints -= selectedThing.cost;
+					selectedThing.bought = true;
+
+					level.player.moves = selectedThing.moves;
+					level.state = Level.STATE_MOVE;
+					level.regen();
+				}
+				else {
+					setText("You don't have enough for that.")
+					textPauseTimer = PAUSE_LENGTH;
+				}
+			}
 		}
 
 		public function onMouseMove(x:Number, y:Number):void {
@@ -113,9 +171,9 @@
 				}
 			}
 			
-			if (greetingTextTimer <= 0) {
+			if (textPauseTimer <= 0) {
 				if (hoverThing) {
-					setText("$" + hoverThing.cost + "\n" + hoverThing.description);
+					setText(hoverThing.costString + "\n" + hoverThing.description);
 				}
 				else {
 					setText("");

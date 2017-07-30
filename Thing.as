@@ -15,6 +15,9 @@
 		// hack for the buy page
 		public var bought:Boolean = false;
 		public var cost:int = 0;
+		public function get costString():String {
+			return bought ? "bought" : "$" + cost;
+		}
 
 		public var dead:Boolean = false;
 		public var animating:Boolean = false;

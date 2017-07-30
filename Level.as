@@ -100,7 +100,7 @@
 			_points = value;
 			if (pointsDisplay) {
 				pointsDisplay.textField.text = value.toString();
-			}
+			} 
 		}
 		public var totalPoints:int = 0;
 		
@@ -150,7 +150,7 @@
 			if (oldPlayer) {
 				player.moves = oldPlayer.moves;
 			}
-			
+
 			var playerX:int = 0;
 			var playerY:int = 0;
 			do {
@@ -371,7 +371,7 @@
 
 			switch (state) {
 				case STATE_TITLE:
-					state = STATE_BUYING;//STATE_HOWTO;
+					state = STATE_HOWTO;
 					break;
 				case STATE_HOWTO:
 					state = STATE_MOVE;
@@ -381,7 +381,7 @@
 					break;
 				case STATE_MOVE:
 					if (player.dead) {
-						regen();
+						goToStore();
 					}
 					if (activeThing == player && player.canMoveTo(gridX, gridY)) {
 						// move player
@@ -391,6 +391,12 @@
 					}
 					break;
 			}
+		}
+
+		public function goToStore():void {
+			buyPage.start();
+			totalPoints += points;
+			state = STATE_BUYING;
 		}
 
 		public function onMouseMove(x:Number, y:Number):void {

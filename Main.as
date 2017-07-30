@@ -17,6 +17,7 @@
 
 		public static const WIDTH:int = 200;
 		public static const HEIGHT:int = 200;
+		public static const SECONDS:int = 24;
 
 		public var bitmap:Bitmap;
 		public var bitmapData:BitmapData;
