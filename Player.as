@@ -50,7 +50,6 @@
 			if (thing && thing !== this) {
 				power = 4;
 			}
-			level.getPieceAtGridCoord(nextX, nextX).addSurroundingPieces();
 			level.activeIndex ++;
 			super.doMove();
 		}

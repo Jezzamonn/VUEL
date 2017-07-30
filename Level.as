@@ -320,6 +320,7 @@
 				player.nextX = gridX;
 				player.nextY = gridY;
 				player.startMoveAnim();
+				getPieceAtGridCoord(gridX, gridY).addSurroundingPieces();
 				state = STATE_ANIM;
 			}
 		}
