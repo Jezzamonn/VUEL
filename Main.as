@@ -39,6 +39,8 @@
 			stage.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 			stage.addEventListener(MouseEvent.CLICK, onClick);
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+
+			SoundManager.play();
 		}
 		
 		public function onResize(evt:Event = null):void {
