@@ -96,7 +96,7 @@
 
 					if (Rndm.boolean(0.7)) {
 						map[y][x] = 1;
-						if (Rndm.boolean(0.1)) {
+						if (Rndm.boolean(0.15)) {
 							addThing(Enemy.randomEnemy(this), x, y);
 						}
 					}
