@@ -4,22 +4,71 @@
 	
 	public class Enemy extends Thing {
 
-		public static function randomEnemy(level:Level):Enemy {
+		public static function randomEnemy(level:Level, difficulty:int = 0):Enemy {
 			var classes:Array = [
-				Battery,
-				Battery,
-				Battery,
-				Lamp,
-				Lamp,
-				Toaster,
-				Toaster,
-				Tv,
-				Tv,
-				Roomba,
-				Roomba,
-				Duck
+				[ // 0
+					Battery,
+					Battery,
+					Lamp,
+					Toaster,
+					Tv,
+					Roomba,
+				],
+				[ // 1
+					Battery,
+					Battery,
+					Battery,
+					Lamp,
+					Lamp,
+					Toaster,
+					Toaster,
+					Tv,
+					Tv,
+					Roomba,
+					Roomba,
+					Duck
+				],
+				[ // 2
+					Battery,
+					Battery,
+					Lamp,
+					Lamp,
+					Toaster,
+					Tv,
+					Tv,
+					Roomba,
+					Roomba,
+					Duck,
+					Fridge
+				],
+				[ // 3
+					Battery,
+					Lamp,
+					Toaster,
+					Tv,
+					Roomba,
+					Duck,
+					Duck,
+					Fridge,
+					Fridge,
+					Drone
+				],
+				[ // 4
+					Lamp,
+					Tv,
+					Roomba,
+					Duck,
+					Duck,
+					Fridge,
+					Fridge,
+					Drone,
+					Drone,
+				]
 			];
-			var clazz:Class = RndmUtil.pickRandom(classes);
+			if (difficulty > 4) {
+				difficulty = 4;
+			}
+			var clazz:Class = RndmUtil.pickRandom(classes[difficulty]);
 			return new clazz(level);
 		}
 

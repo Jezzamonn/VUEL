@@ -43,10 +43,19 @@
 		}
 
 		public function addThings():void {
+			// difficulty = distance from start
+			var dist:int = Math.abs(x) + Math.abs(y);
+			var difficulty:int = Math.floor(dist * 0.4);
+
+			var spawnChance:Number = 0.05 + 0.001 * dist;
+
+			trace("Difficulty: " + difficulty);
+			trace("Spawn Chance: " + spawnChance)
+
 			for (var y:int = 0; y < HEIGHT; y ++) {
 				for (var x:int = 0; x < WIDTH; x ++) {
-					if (level.validSquare(this.x * WIDTH + x, this.y * HEIGHT + y) && Rndm.boolean(0.05)) {
-						level.addThingAt(Enemy.randomEnemy(level), this.x * WIDTH + x, this.y * HEIGHT + y);
+					if (level.validSquare(this.x * WIDTH + x, this.y * HEIGHT + y) && Rndm.boolean(spawnChance)) {
+						level.addThingAt(Enemy.randomEnemy(level, difficulty), this.x * WIDTH + x, this.y * HEIGHT + y);
 					}
 				}
 			}
