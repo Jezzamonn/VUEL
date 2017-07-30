@@ -95,9 +95,13 @@
 		public function regen():void {
 			things = [];
 
+			piecesLeft = 0;
+			piecesTop = 0;
+			piecesHeight = 1;
+			piecesWidth = 1;
 			pieces = [[null]];
 			addLevelPiece(0, 0);
-
+			getPieceAtPieceCoord(0, 0).addSurroundingPieces();
 
 			player = new Player(this); 
 			var playerX:int = 0;
@@ -153,15 +157,15 @@
 			}
 
 			// TODO: Set this properly?
-			pieces[y + piecesTop][x + piecesLeft] = new LevelPiece(this, x, y);
-			pieces[y + piecesTop][x + piecesLeft].addThings();
+			pieces[y - piecesTop][x - piecesLeft] = new LevelPiece(this, x, y);
+			pieces[y - piecesTop][x - piecesLeft].addThings();
 		}
 
 		public function getPieceAtPieceCoord(x:int, y:int):LevelPiece {
 			if (x < piecesLeft || y < piecesTop || x >= piecesLeft + piecesWidth || y >= piecesTop + piecesHeight) {
 				return null;
 			}
-			return pieces[y + piecesTop][x + piecesLeft];
+			return pieces[y - piecesTop][x - piecesLeft];
 		}
 
 		public function getPieceAtGridCoord(x:int, y:int):LevelPiece {
@@ -295,6 +299,7 @@
 			
 			if (state == STATE_MOVE && activeThing == player && player.canMoveTo(gridX, gridY)) {
 				player.moveTo(gridX, gridY);
+				getPieceAtGridCoord(gridX, gridY).addSurroundingPieces();
 				activeIndex ++;
 			}
 		}

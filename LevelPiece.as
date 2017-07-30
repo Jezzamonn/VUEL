@@ -45,8 +45,20 @@
 		public function addThings():void {
 			for (var y:int = 0; y < HEIGHT; y ++) {
 				for (var x:int = 0; x < WIDTH; x ++) {
-					if (level.validSquare(this.x * WIDTH + x, this.y * HEIGHT + y) && Rndm.boolean(0.15)) {
+					if (level.validSquare(this.x * WIDTH + x, this.y * HEIGHT + y) && Rndm.boolean(0.05)) {
 						level.addThingAt(Enemy.randomEnemy(level), this.x * WIDTH + x, this.y * HEIGHT + y);
+					}
+				}
+			}
+		}
+
+		public function addSurroundingPieces():void {
+			for (var y:int = -1; y <= 1; y ++) {
+				for (var x:int = -1; x <= 1; x ++) {
+					if (x == 0 && y == 0) continue;
+
+					if (!level.getPieceAtPieceCoord(this.x + x, this.y + y)) {
+						level.addLevelPiece(this.x + x, this.y + y);
 					}
 				}
 			}
