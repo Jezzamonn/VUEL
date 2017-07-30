@@ -6,8 +6,7 @@
 	
 	public class Level {
 		
-		public static const BG_COLOR:int = 0x151729;
-		public static const REG_OUTLINE_COLOR:int = 0x343857;
+		public static const COLORS:Array = [0x151729, 0x343857, 0x555976, 0x818396];
 
 		[Embed(source = "graphics/tiles.png")]
 		private static const TILES_CLASS:Class;
@@ -50,8 +49,8 @@
 		public var piecesWidth:int = 1;
 		public var piecesHeight:int = 1;
 
+		// ========================= THINGS AND THE ACTIVE THING AND SUCH =========================
 		public var things:Array;
-
 		private var _activeIndex:int = 0;
 
 		public function get activeIndex():int {
@@ -79,11 +78,16 @@
 			activeIndex = things.indexOf(value);
 		}
 
+		// ========================= MISC THINGS =========================
+
 		public var mouseOverred:Thing = null;
 
 		public var batteryIcon:BatteryIcon;
 		public var pointsDisplay:TextBox;
-		
+		public var title:Title;
+
+		// ========================= STATE =========================
+
 		private var _points:int = 0;
 		public function get points():int {
 			return _points;
@@ -95,19 +99,22 @@
 			}
 		}
 		public var count:int = 0;
-		public var state:int = STATE_MOVE;
+		public var state:int = STATE_TITLE;
 
-		public static const STATE_IDLE:int = 0;
+		public static const STATE_TITLE:int = 0;
 		public static const STATE_MOVE:int = 1;
 		public static const STATE_ANIM:int = 2;
 
+		// ========================= CONSTRUCTOR AND FUNCTIONS =========================
+
 		public function Level() {
 			batteryIcon = new BatteryIcon();
-			pointsDisplay = new TextBox(REG_OUTLINE_COLOR, 16, "right");
+			pointsDisplay = new TextBox("nokia", COLORS[1], 16, "right");
 			pointsDisplay.x = 0;
 			pointsDisplay.y = 0;
-			pointsDisplay.textField.width = Main.WIDTH;
 			pointsDisplay.textField.text = "0";
+
+			title = new Title();
 			
 			regen();
 		}
@@ -284,7 +291,7 @@
 			var thing:*;
 			count ++;
 			switch (state) {
-				case STATE_IDLE:
+				case STATE_TITLE:
 					// nothing?
 					break;
 				case STATE_MOVE:
@@ -331,24 +338,30 @@
 			camY += (desiredCamY - camY) / 10;
 		}
 
+		// ========================= (MOUSE) INPUT =========================
+
 		public function onMouseDown(x:Number, y:Number):void {
 			var localX:int = x + xOffset;
 			var localY:int = y + yOffset;
 
 			var gridX:int = Math.floor(localX / GRID_SIZE);
 			var gridY:int = Math.floor(localY / GRID_SIZE);
-			
-			if (state == STATE_MOVE) {
-				if (player.dead) {
-					regen();
-				}
-				if (activeThing == player && player.canMoveTo(gridX, gridY)) {
-					// move player
-					player.startMoveAnim({x: gridX - player.x, y: gridY - player.y});
-					getPieceAtGridCoord(gridX, gridY).addSurroundingPieces();
-					state = STATE_ANIM;
-				}
 
+			switch (state) {
+				case STATE_TITLE:
+					state = STATE_MOVE;
+					break;
+				case STATE_MOVE:
+					if (player.dead) {
+						regen();
+					}
+					if (activeThing == player && player.canMoveTo(gridX, gridY)) {
+						// move player
+						player.startMoveAnim({x: gridX - player.x, y: gridY - player.y});
+						getPieceAtGridCoord(gridX, gridY).addSurroundingPieces();
+						state = STATE_ANIM;
+					}
+					break;
 			}
 		}
 
@@ -371,14 +384,23 @@
 			}
 		}
 
+		// ========================= RENDERING =========================
+
 		public function render(context:BitmapData):void {
-			context.fillRect(context.rect, BG_COLOR);
-			renderBg(context, xOffset, yOffset);
-			renderThings(context, xOffset, yOffset);
-			renderMoves(context, xOffset, yOffset);
-			
-			batteryIcon.render(context);
-			pointsDisplay.render(context);
+			switch (state) {
+				case STATE_TITLE:
+					title.render(context);
+					break;
+				default:
+					context.fillRect(context.rect, COLORS[0]);
+					renderBg(context, xOffset, yOffset);
+					renderThings(context, xOffset, yOffset);
+					renderMoves(context, xOffset, yOffset);
+					
+					batteryIcon.render(context);
+					pointsDisplay.render(context);
+					break;
+			}
 		}
 		
 		public function renderThings(context:BitmapData, xOffset:int = 0, yOffset:int = 0):void {

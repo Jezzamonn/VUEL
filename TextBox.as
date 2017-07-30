@@ -14,6 +14,20 @@
         embedAsCFF="false")]
 		private static const NOKIAFC22:Class;
 
+		[Embed(source="m5x7.ttf",
+        fontName = "m5x7",
+        mimeType = "application/x-font",
+        advancedAntiAliasing="true",
+        embedAsCFF="false")]
+		private static const M5X7:Class;
+
+		[Embed(source="m3x6.ttf",
+        fontName = "m3x6",
+        mimeType = "application/x-font",
+        advancedAntiAliasing="true",
+        embedAsCFF="false")]
+		private static const M3X6:Class;
+
 		public var x:int;
 		public var y:int;
 
@@ -21,8 +35,8 @@
 		public var textFormat:TextFormat;
 		
 		// "left", "right", "center"
-		public function TextBox(color:int = 0, size:int = 8, align:String = "left"):void {
-			textFormat = new TextFormat("nokia", size, color);
+		public function TextBox(fontName:String, color:int = 0, size:int = 8, align:String = "left"):void {
+			textFormat = new TextFormat(fontName, size, color);
 			textFormat.align = align;
 			
 			textField = new TextField();
@@ -30,6 +44,7 @@
 			textField.wordWrap = true;
 			textField.autoSize = align;
 			textField.embedFonts = true;
+			textField.width = Main.WIDTH;
 		}
 
 		public function render(context:BitmapData):void {
