@@ -5,6 +5,9 @@
 	import com.gskinner.utils.Rndm;
 	
 	public class Level {
+		
+		public static const BG_COLOR:int = 0x151729;
+		public static const REG_OUTLINE_COLOR:int = 0x343857;
 
 		[Embed(source = "graphics/tiles.png")]
 		private static const TILES_CLASS:Class;
@@ -79,7 +82,18 @@
 		public var mouseOverred:Thing = null;
 
 		public var batteryIcon:BatteryIcon;
+		public var pointsDisplay:TextBox;
 		
+		private var _points:int = 0;
+		public function get points():int {
+			return _points;
+		}
+		public function set points(value:int):void {
+			_points = value;
+			if (pointsDisplay) {
+				pointsDisplay.textField.text = value.toString();
+			}
+		}
 		public var count:int = 0;
 		public var state:int = STATE_MOVE;
 
@@ -89,10 +103,17 @@
 
 		public function Level() {
 			batteryIcon = new BatteryIcon();
+			pointsDisplay = new TextBox(REG_OUTLINE_COLOR, 16, "right");
+			pointsDisplay.x = 0;
+			pointsDisplay.y = 0;
+			pointsDisplay.textField.width = Main.WIDTH;
+			pointsDisplay.textField.text = "0";
+			
 			regen();
 		}
 
 		public function regen():void {
+			points = 0;
 			things = [];
 
 			piecesLeft = 0;
@@ -343,12 +364,13 @@
 		}
 
 		public function render(context:BitmapData):void {
-			context.fillRect(context.rect, 0x151729);
+			context.fillRect(context.rect, BG_COLOR);
 			renderBg(context, xOffset, yOffset);
 			renderThings(context, xOffset, yOffset);
 			renderMoves(context, xOffset, yOffset);
 			
 			batteryIcon.render(context);
+			pointsDisplay.render(context);
 		}
 		
 		public function renderThings(context:BitmapData, xOffset:int = 0, yOffset:int = 0):void {

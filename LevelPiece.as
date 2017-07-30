@@ -53,7 +53,7 @@
 		}
 
 		public function addSurroundingPieces():void {
-			trace("Add surrounding from (" + this.x + ", " + this.y + ")");
+			//trace("Add surrounding from (" + this.x + ", " + this.y + ")");
 			for (var y:int = -1; y <= 1; y ++) {
 				for (var x:int = -1; x <= 1; x ++) {
 					if (x == 0 && y == 0) continue;

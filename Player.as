@@ -45,6 +45,7 @@
 			var thing:Thing = replacingThing;
 			if (thing && thing !== this) {
 				power = 4;
+				level.points ++;
 			}
 			level.activeIndex ++;
 			super.doMove();
