@@ -12,6 +12,7 @@
 		public var x:int;
 		public var y:int;
 
+		public var dead:Boolean = false;
 		public var animating:Boolean = false;
 		public var animAmt:Number = 1;
 		public var prevX:int;

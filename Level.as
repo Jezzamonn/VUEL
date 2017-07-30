@@ -248,6 +248,7 @@
 		}
 
 		public function removeThing(thing:Thing):void {
+			thing.dead = true;
 			var index:int = things.indexOf(thing);
 			if (things[index] === player) {
 			}
@@ -292,7 +293,7 @@
 						// wait for the player to pick a move
 					}
 					else {
-						for (var i:int = 0; i < 4; i ++) {
+						for (var i:int = 0; i < Math.ceil(things.length / 4); i ++) {
 							activeThing.startMoveAnim();
 							activeIndex ++;
 							count = 0;
@@ -337,10 +338,17 @@
 			var gridX:int = Math.floor(localX / GRID_SIZE);
 			var gridY:int = Math.floor(localY / GRID_SIZE);
 			
-			if (state == STATE_MOVE && activeThing == player && player.canMoveTo(gridX, gridY)) {
-				player.startMoveAnim({x: gridX - player.x, y: gridY - player.y});
-				getPieceAtGridCoord(gridX, gridY).addSurroundingPieces();
-				state = STATE_ANIM;
+			if (state == STATE_MOVE) {
+				if (player.dead) {
+					regen();
+				}
+				if (activeThing == player && player.canMoveTo(gridX, gridY)) {
+					// move player
+					player.startMoveAnim({x: gridX - player.x, y: gridY - player.y});
+					getPieceAtGridCoord(gridX, gridY).addSurroundingPieces();
+					state = STATE_ANIM;
+				}
+
 			}
 		}
 

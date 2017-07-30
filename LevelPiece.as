@@ -35,7 +35,7 @@
 					map[y][x] = 0;
 					thingMap[y][x] = null;
 
-					if (Rndm.boolean(0.7)) {
+					if (Rndm.boolean(0.85)) {
 						map[y][x] = 1;
 					}
 				}
