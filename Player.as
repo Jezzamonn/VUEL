@@ -18,7 +18,7 @@
 		public function Player(level:Level) {
 			super(level);
 
-			power = 3;
+			power = 4;
 
 			renderOffset = 0;
 
@@ -42,10 +42,7 @@
 			power --;
 			var thing:Thing = level.getThingAt(x, y);
 			if (thing) {
-				power += thing.power;
-				if (power > 3) {
-					power = 3;
-				}
+				power = 4;
 			}
 			super.moveTo(x, y);
 		}

@@ -24,18 +24,10 @@ package  {
 		public function render(context:BitmapData):void {
 			var rect:Rectangle = new Rectangle(0, 0, 10, 18);
 			var point:Point = new Point(3, 3);
-			if (player.power >= 3) {
-				rect.x = 0 * rect.width;
-			}
-			else if (player.power == 2) {
-				rect.x = 1 * rect.width;
-			}
-			else if (player.power == 1) {
-				rect.x = 2 * rect.width;
-			}
-			else if (player.power <= 0) {
-				rect.x = 3 * rect.width;
-			}
+
+			var displayedPower:int = Util.clamp(player.power, 0, 4);
+
+			rect.x = (4 - displayedPower) * rect.width;
 			context.copyPixels(image, rect, point, null, null, true);
 		}
 

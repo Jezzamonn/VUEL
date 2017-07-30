@@ -7,6 +7,12 @@ package  {
 			if (result < 0) result += y;
 			return result;
 		}
+
+		public static function clamp(val:int, min:int, max:int):int {
+			if (val < min) return min;
+			if (val > max) return max;
+			return val;
+		}
 	}
 	
 }
