@@ -28,7 +28,7 @@
 		}
 
 		public override function makeMoveSound():void {
-			var thing:Thing = level.getThingAt(nextX, nextY);
+			var thing:Thing = replacingThing;
 			if (thing && thing === level.player) {
 				SoundManager.playSound("splode");
 			}

@@ -13,9 +13,10 @@
 		public var y:int;
 
 		public var animating:Boolean = false;
-		public var animAmt:Number = 0;
-		public var nextX:int;
-		public var nextY:int;
+		public var animAmt:Number = 1;
+		public var prevX:int;
+		public var prevY:int;
+		public var replacingThing:Thing;
 		
 		public function get centerX():int {
 			return (x + 0.5) * Level.GRID_SIZE;
@@ -43,15 +44,20 @@
 			];
 		}
 
-		public function startMoveAnim():void {
-			var move:Object = pickMove();
+		public function startMoveAnim(move:Object = null):void {
+			if (move == null) {
+				move = pickMove();
+			}
+			// still null? give up chum 
 			if (move == null) {
 				return;
 			}
 
-			this.nextX = x + move.x;
-			this.nextY = y + move.y;
+			this.prevX = x;
+			this.prevY = y;
 			animating = true;
+			animAmt = 0;
+			moveTo(x + move.x, y + move.y);
 		}
 
 		public function pickMove():Object {
@@ -73,16 +79,26 @@
 
 		public function doMove():void {
 			makeMoveSound();
-			moveTo(nextX, nextY);
+			// crush anything underneath
+			if (replacingThing && replacingThing !== this) {
+				level.removeThing(replacingThing);
+			}
 		}
 
 		public function makeMoveSound():void {
-			SoundManager.playSound("hop");
+			var thing:Thing = replacingThing;
+			if (thing && thing !== this) {
+				SoundManager.playSound("splode");
+			}
+			else {
+				SoundManager.playSound("hop");
+			}
 		}
 		
 		public function moveTo(x:int, y:int):void {
+			replacingThing = level.getThingAt(x, y);
 			level.setThingAt(null, this.x, this.y, false);
-			level.setThingAt(this, x, y);
+			level.setThingAt(this, x, y, false);
 		}
 		
 		public function canMoveTo(x:int, y:int):Boolean {
@@ -103,7 +119,7 @@
 				if (animAmt >= 1) {
 					// actually do the move here.
 					doMove();
-					animAmt = 0;
+					animAmt = 1;
 					animating = false;
 				}
 			}
@@ -137,12 +153,12 @@
 		}
 
 		public function getAnimX():int {
-			var xPos:Number = x * (1 - animAmt) + nextX * animAmt;
+			var xPos:Number = prevX * (1 - animAmt) + x * animAmt;
 			return Math.round(xPos * Level.GRID_SIZE);
 		}
 
 		public function getAnimY():int {
-			var baseY:Number = y * (1 - animAmt) + nextY * animAmt;
+			var baseY:Number = prevY * (1 - animAmt) + y * animAmt;
 			var jumpAmt:Number = 4 * animAmt * (1 - animAmt);
 			var jumpY:Number = -0.5 * jumpAmt;
 			return Math.round((baseY + jumpY) * Level.GRID_SIZE);

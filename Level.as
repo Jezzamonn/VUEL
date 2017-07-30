@@ -317,9 +317,7 @@
 			var gridY:int = Math.floor(localY / GRID_SIZE);
 			
 			if (state == STATE_MOVE && activeThing == player && player.canMoveTo(gridX, gridY)) {
-				player.nextX = gridX;
-				player.nextY = gridY;
-				player.startMoveAnim();
+				player.startMoveAnim({x: gridX - player.x, y: gridY - player.y});
 				getPieceAtGridCoord(gridX, gridY).addSurroundingPieces();
 				state = STATE_ANIM;
 			}
