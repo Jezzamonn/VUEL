@@ -85,6 +85,7 @@
 		public var batteryIcon:BatteryIcon;
 		public var pointsDisplay:TextBox;
 		public var title:Title;
+		public var howTo:HowTo;
 
 		// ========================= STATE =========================
 
@@ -104,6 +105,7 @@
 		public static const STATE_TITLE:int = 0;
 		public static const STATE_MOVE:int = 1;
 		public static const STATE_ANIM:int = 2;
+		public static const STATE_HOWTO:int = 3;
 
 		// ========================= CONSTRUCTOR AND FUNCTIONS =========================
 
@@ -115,6 +117,7 @@
 			pointsDisplay.textField.text = "0";
 
 			title = new Title();
+			howTo = new HowTo();
 			
 			regen();
 		}
@@ -349,6 +352,9 @@
 
 			switch (state) {
 				case STATE_TITLE:
+					state = STATE_HOWTO;
+					break;
+				case STATE_HOWTO:
 					state = STATE_MOVE;
 					break;
 				case STATE_MOVE:
@@ -390,6 +396,9 @@
 			switch (state) {
 				case STATE_TITLE:
 					title.render(context);
+					break;
+				case STATE_HOWTO:
+					howTo.render(context);
 					break;
 				default:
 					context.fillRect(context.rect, COLORS[0]);
