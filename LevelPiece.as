@@ -21,9 +21,13 @@
 			this.x = x;
 			this.y = y;
 
+			gen();
+		}
+		
+		public function gen():void {
 			map = [];
 			thingMap = [];
-
+			
 			for (var y:int = 0; y < HEIGHT; y ++) {
 				map[y] = [];
 				thingMap[y] = [];
@@ -34,9 +38,15 @@
 					if (Rndm.boolean(0.7)) {
 						map[y][x] = 1;
 					}
+				}
+			}
+		}
 
-					if (Rndm.boolean(0.2)) {
-						level.setThingAt(new Enemy(level), x, y);
+		public function addThings():void {
+			for (var y:int = 0; y < HEIGHT; y ++) {
+				for (var x:int = 0; x < WIDTH; x ++) {
+					if (level.validSquare(this.x * WIDTH + x, this.y * HEIGHT + y) && Rndm.boolean(0.15)) {
+						level.addThingAt(Enemy.randomEnemy(level), this.x * WIDTH + x, this.y * HEIGHT + y);
 					}
 				}
 			}

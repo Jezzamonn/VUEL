@@ -27,11 +27,8 @@
 
 		public static const GRID_SIZE:int = 20;
 		
-		public static const WIDTH:int = 9;
-		public static const HEIGHT:int = 9;
-
-		public var camX:Number = WIDTH * GRID_SIZE / 2;
-		public var camY:Number = HEIGHT * GRID_SIZE  / 2;
+		public var camX:Number = 0;
+		public var camY:Number = 0;
 		public var desiredCamX:Number = 0;
 		public var desiredCamY:Number = 0;
 		public function get xOffset():int {
@@ -49,6 +46,7 @@
 		public var piecesTop:int = 0;
 		public var piecesWidth:int = 1;
 		public var piecesHeight:int = 1;
+
 		public var things:Array;
 
 		private var _activeIndex:int = 0;
@@ -95,20 +93,21 @@
 		}
 
 		public function regen():void {
+			things = [];
+
 			pieces = [[null]];
 			addLevelPiece(0, 0);
 
-			things = [];
 
 			player = new Player(this); 
 			var playerX:int = 0;
 			var playerY:int = 0;
 			do {
-				playerX = Rndm.integer(WIDTH);
-				playerY = Rndm.integer(HEIGHT);
+				playerX = Rndm.integer(LevelPiece.WIDTH);
+				playerY = Rndm.integer(LevelPiece.HEIGHT);
 			}
 			while (!validSquare(playerX, playerY));
-			setThingAt(player, playerX, playerY);
+			addThingAt(player, playerX, playerY);
 			activeThing = player;
 			
 			batteryIcon.player = player;
@@ -155,6 +154,7 @@
 
 			// TODO: Set this properly?
 			pieces[y + piecesTop][x + piecesLeft] = new LevelPiece(this, x, y);
+			pieces[y + piecesTop][x + piecesLeft].addThings();
 		}
 
 		public function getPieceAtPieceCoord(x:int, y:int):LevelPiece {
@@ -195,18 +195,46 @@
 			return piece.thingMap[relY][relX];
 		}
 
-		public function setThingAt(thing:Thing, x:int, y:int):void {
+		public function addThingAt(thing:Thing, x:int, y:int):void {
+			setThingAt(thing, x, y);
+			things.push(thing);
+		}
+
+		public function setThingAt(thing:Thing, x:int, y:int, clearOld:Boolean = true):void {
+			if (clearOld) {
+				var existingThing:Thing = getThingAt(x, y);
+				if (existingThing && existingThing !== thing) {
+					removeThing(existingThing);
+				}
+			}
+
 			var piece:LevelPiece = getPieceAtGridCoord(x, y);
 			if (piece == null) {
 				return;
 			}
 
-			thing.x = x;
-			thing.y = y;
 			var relX:int = Util.absMod(x, LevelPiece.WIDTH);
 			var relY:int = Util.absMod(y, LevelPiece.HEIGHT);
 			piece.thingMap[relY][relX] = thing;
+			if (thing) {
+				thing.x = x;
+				thing.y = y;
+			}
 		}
+
+		public function removeThing(thing:Thing):void {
+			var index:int = things.indexOf(thing);
+			if (things[index] === player) {
+			}
+			if (activeIndex == index) {
+				activeIndex --;
+			}
+			things.splice(index, 1);
+			if (activeIndex > index) {
+				_activeIndex --;
+			}
+ 		}
+
 
 		
 		public function validSquare(x:int, y:int):Boolean {
@@ -250,12 +278,12 @@
 					break;
 			}
 
-			//desiredCamX = player.centerX;
-			//desiredCamY = player.centerY;
+			desiredCamX = player.centerX;
+			desiredCamY = player.centerY;
 			
 			// update cam
-			//camX += (desiredCamX - camX) / 10;
-			//camY += (desiredCamY - camY) / 10;
+			camX += (desiredCamX - camX) / 10;
+			camY += (desiredCamY - camY) / 10;
 		}
 
 		public function onMouseDown(x:Number, y:Number):void {
@@ -314,9 +342,10 @@
 		public function renderBg(context:BitmapData, xOffset:int = 0, yOffset:int = 0):void {
 			var rect:Rectangle = new Rectangle(0, 0, 20, 23);
 			var point:Point = new Point();
-			for (var y:int = 0; y < HEIGHT; y ++) {
+
+			for (var y:int = piecesTop * LevelPiece.HEIGHT; y < (piecesTop + piecesHeight) * LevelPiece.HEIGHT; y ++) {
 				point.y = y * GRID_SIZE - yOffset;
-				for (var x:int = 0; x < WIDTH; x ++) {
+				for (var x:int = piecesLeft * LevelPiece.WIDTH; x < (piecesLeft + piecesWidth) * LevelPiece.WIDTH; x ++) {
 					point.x = x * GRID_SIZE - xOffset;
 
 					if (getTileAt(x, y)) {

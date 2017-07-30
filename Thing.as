@@ -56,6 +56,7 @@
 		}
 		
 		public function moveTo(x:int, y:int):void {
+			level.setThingAt(null, this.x, this.y, false);
 			level.setThingAt(this, x, y);
 		}
 		
