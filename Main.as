@@ -1,5 +1,6 @@
 ﻿package  {
 	
+	import com.gskinner.utils.Rndm;
 	import flash.display.MovieClip;
 	import flash.display.BitmapData;
 	import flash.display.Bitmap;
@@ -34,6 +35,9 @@
 			bitmap = new Bitmap(bitmapData);
 			
 			addChild(bitmap);
+
+			// init random seed to something actually random
+			Rndm.seed = 0xFFFFFF * Math.random();
 			
 			level = new Level();
 			
