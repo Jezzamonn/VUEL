@@ -12,6 +12,10 @@
 		public var x:int;
 		public var y:int;
 
+		// hack for the buy page
+		public var bought:Boolean = false;
+		public var cost:int = 0;
+
 		public var dead:Boolean = false;
 		public var animating:Boolean = false;
 		public var animAmt:Number = 1;

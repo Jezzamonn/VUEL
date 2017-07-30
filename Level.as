@@ -128,7 +128,7 @@
 
 			title = new Title();
 			howTo = new HowTo();
-			buyPage = new BuyPage();
+			buyPage = new BuyPage(this);
 			
 			regen();
 		}
@@ -145,7 +145,12 @@
 			addLevelPiece(0, 0);
 			getPieceAtPieceCoord(0, 0).addSurroundingPieces();
 
-			player = new Player(this); 
+			var oldPlayer:Player = player;
+			player = new Player(this);
+			if (oldPlayer) {
+				player.moves = oldPlayer.moves;
+			}
+			
 			var playerX:int = 0;
 			var playerY:int = 0;
 			do {
