@@ -64,18 +64,18 @@
 			return false;
 		}
 		
-		public function render(context:BitmapData):void {
-			renderSelf(context);
+		public function render(context:BitmapData, xOffset:int = 0, yOffset:int = 0):void {
+			renderSelf(context, xOffset, yOffset);
 			if (active || showMoves) {
-				renderMoves(context);
+				renderMoves(context, xOffset, yOffset);
 			}
 		}
 
-		public function renderSquare(context:BitmapData, x:int, y:int, color:int, edge:int = 0):void {
+		public function renderSquare(context:BitmapData, x:int, y:int, color:int, edge:int = 0, xOffset:int = 0, yOffset:int = 0):void {
 			context.fillRect(
 				new Rectangle(
-					x * Level.GRID_SIZE + edge,
-					y * Level.GRID_SIZE + edge,
+					x * Level.GRID_SIZE + edge - xOffset,
+					y * Level.GRID_SIZE + edge - yOffset,
 					Level.GRID_SIZE - 2 * edge,
 					Level.GRID_SIZE - 2 * edge
 				),
@@ -83,22 +83,24 @@
 			);
 		}
 
-		public function renderSelf(context:BitmapData):void {
+		public function renderSelf(context:BitmapData, xOffset:int = 0, yOffset:int = 0):void {
 			//renderSquare(context, x, y, 0x990099, 1);
 			context.copyPixels(
 				Player.image,
 				new Rectangle(20 * renderOffset, 0, 20, 20),
-				new Point(x * Level.GRID_SIZE, y * Level.GRID_SIZE),
+				new Point(
+					x * Level.GRID_SIZE - xOffset,
+					y * Level.GRID_SIZE - yOffset),
 				null, null, true);
 		}
 
-		public function renderMoves(context:BitmapData):void {
+		public function renderMoves(context:BitmapData, xOffset:int = 0, yOffset:int = 0):void {
 			var rect:Rectangle = new Rectangle(20, 0, 20, 20);
 			var point:Point = new Point();
 			for each (var move:* in moves) {
 				if (level.validSquare(x + move.x, y + move.y)) {
-					point.x = (x + move.x) * Level.GRID_SIZE;
-					point.y = (y + move.y) * Level.GRID_SIZE;
+					point.x = (x + move.x) * Level.GRID_SIZE - xOffset;
+					point.y = (y + move.y) * Level.GRID_SIZE - yOffset;
 					context.copyPixels(Level.misc, rect, point, null, null, true);
 				}
 			}

@@ -31,8 +31,16 @@
 		public static const WIDTH:int = 9;
 		public static const HEIGHT:int = 9;
 
-		public var camX:Number;
-		public var camY:Number;
+		public var camX:Number = WIDTH * GRID_SIZE / 2;
+		public var camY:Number = HEIGHT * GRID_SIZE  / 2;
+		public var desiredCamX:Number = 0;
+		public var desiredCamY:Number = 0;
+		public function get xOffset():int {
+			return Math.round(camX - Main.WIDTH / 2);
+		}
+		public function get yOffset():int {
+			return Math.round(camY - Main.WIDTH / 2);
+		}
 		
 		public var map:Array;
 		public var thingMap:Array;
@@ -211,8 +219,11 @@
 		}
 
 		public function onMouseDown(x:Number, y:Number):void {
-			var gridX:int = Math.floor(x / GRID_SIZE);
-			var gridY:int = Math.floor(y / GRID_SIZE);
+			var localX:int = x + xOffset;
+			var localY:int = y + yOffset
+
+			var gridX:int = Math.floor(localX / GRID_SIZE);
+			var gridY:int = Math.floor(localY / GRID_SIZE);
 			
 			if (state == STATE_MOVE && activeThing == player && player.canMoveTo(gridX, gridY)) {
 				player.moveTo(gridX, gridY);
@@ -225,9 +236,12 @@
 				mouseOverred.showMoves = false;
 			}
 			mouseOverred = null;
+			
+			var localX:int = x + xOffset;
+			var localY:int = y + yOffset;
 
-			var gridX:int = Math.floor(x / GRID_SIZE);
-			var gridY:int = Math.floor(y / GRID_SIZE);
+			var gridX:int = Math.floor(localX / GRID_SIZE);
+			var gridY:int = Math.floor(localY / GRID_SIZE);
 
 			var thing:Thing = getThingAt(gridX, gridY);
 			if (thing) {
@@ -236,7 +250,9 @@
 			}
 		}
 
-		public function render(context:BitmapData, xOffset:int = 0, yOffset:int = 0):void {
+		public function render(context:BitmapData):void {
+			var xOffset:int = camX - Main.WIDTH / 2;
+			var yOffset:int = camY - Main.HEIGHT / 2;
 			context.fillRect(context.rect, 0);
 			renderBg(context, xOffset, yOffset);
 			renderThings(context, xOffset, yOffset);
@@ -244,7 +260,7 @@
 		
 		public function renderThings(context:BitmapData, xOffset:int = 0, yOffset:int = 0):void {
 			for each (var thing:* in things) {
-				thing.render(context);
+				thing.render(context, xOffset, yOffset);
 			}
 			//for (var y:int = 0; y < HEIGHT; y ++) {
 			//	for (var x:int = 0; x < WIDTH; x ++) {
@@ -258,9 +274,9 @@
 			var rect:Rectangle = new Rectangle(0, 0, 20, 23);
 			var point:Point = new Point();
 			for (var y:int = 0; y < HEIGHT; y ++) {
-				point.y = y * GRID_SIZE;
+				point.y = y * GRID_SIZE - xOffset;
 				for (var x:int = 0; x < WIDTH; x ++) {
-					point.x = x * GRID_SIZE;
+					point.x = x * GRID_SIZE - yOffset;
 
 					if (getTileAt(x, y)) {
 						if (getTileAt(x, y+1)) {

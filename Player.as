@@ -35,13 +35,13 @@
 			]
 		}
 
-		public override function renderMoves(context:BitmapData):void {
+		public override function renderMoves(context:BitmapData, xOffset:int = 0, yOffset:int = 0):void {
 			var rect:Rectangle = new Rectangle(0, 0, 20, 20);
 			var point:Point = new Point();
 			for each (var move:* in moves) {
 				if (level.validSquare(x + move.x, y + move.y)) {
-					point.x = (x + move.x) * Level.GRID_SIZE;
-					point.y = (y + move.y) * Level.GRID_SIZE;
+					point.x = (x + move.x) * Level.GRID_SIZE - xOffset;
+					point.y = (y + move.y) * Level.GRID_SIZE - yOffset;
 					context.copyPixels(Level.misc, rect, point, null, null, true);
 				}
 			}
