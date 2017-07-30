@@ -19,7 +19,7 @@ package  {
 			];
 
 			name = "TV";
-			description = "Moves fast horizontally, but has difficulty getting you if you're too close."
+			description = "Moves fast horizontally. Clever positioning can make these less threatening than they seem."
 		}
 		
 	}

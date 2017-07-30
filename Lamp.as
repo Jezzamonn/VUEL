@@ -17,7 +17,7 @@
 			];
 
 			name = "Lamp";
-			description = "This internet-connected lamp has gone haywire since the WiFi went down. Moves steadily.";
+			description = "This internet-connected lamp has gone haywire since the WiFi went down.";
 
 		}
 		

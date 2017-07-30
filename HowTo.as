@@ -9,12 +9,12 @@
 			textBox = new TextBox("nokia", Level.COLORS[3], 8);
 			textBox.textField.text = 
 				"How to survive in the year 2196:\n\n" +
-				"- Click a square to move\n\n" +
-				"- Click yourself to wait\n\n" +
 				"- Stomp things to take their power\n\n" +
 				"- Don't run out of power\n\n" +
-				"- Don't get stomped";
-			textBox.y = 0.2 * Main.HEIGHT;
+				"- Don't get stomped\n\n\n\n" +
+				"- Click a square to move\n\n" +
+				"- Click yourself to wait\n\n";
+			textBox.y = 0.15 * Main.HEIGHT;
 			textBox.x = 2;
 		}
 		
