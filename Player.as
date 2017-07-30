@@ -39,12 +39,20 @@
 
 		public override function moveTo(x:int, y:int):void {
 			// assume this move is ok
-			power --;
+			if (this.x != x || this.y != y) {
+				power --;
+			}
 			var thing:Thing = level.getThingAt(x, y);
-			if (thing) {
+			if (thing && thing !== this) {
 				power = 4;
 			}
 			super.moveTo(x, y);
+		}
+
+		public override function maybeRenderMoves(context:BitmapData, xOffset:int = 0, yOffset:int = 0):void {
+			if (active || showMoves) {
+				renderMoves(context, xOffset, yOffset);
+			}
 		}
 
 		public override function renderMoves(context:BitmapData, xOffset:int = 0, yOffset:int = 0):void {

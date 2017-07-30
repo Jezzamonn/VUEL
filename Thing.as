@@ -100,7 +100,7 @@
 		}
 		
 		public function maybeRenderMoves(context:BitmapData, xOffset:int = 0, yOffset:int = 0):void {
-			if (active || showMoves) {
+			if (showMoves) {
 				renderMoves(context, xOffset, yOffset);
 			}
 		}

@@ -7,9 +7,15 @@
 		public static function randomEnemy(level:Level):Enemy {
 			var classes:Array = [
 				Battery,
+				Battery,
+				Battery,
 				Lamp,
-				Tv,
+				Lamp,
 				Toaster,
+				Toaster,
+				Tv,
+				Tv,
+				Roomba,
 				Roomba,
 				Duck
 			];
