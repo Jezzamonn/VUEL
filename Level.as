@@ -285,6 +285,10 @@
 			if (activeIndex > index) {
 				_activeIndex --;
 			}
+
+			if (thing === player) {
+				SoundManager.setSong("bitcrush");
+			}
  		}
 
 
@@ -375,6 +379,7 @@
 					break;
 				case STATE_HOWTO:
 					state = STATE_MOVE;
+					SoundManager.setSong("song");
 					break;
 				case STATE_BUYING:
 					buyPage.onMouseDown(x, y);
@@ -383,7 +388,7 @@
 					if (player.dead) {
 						goToStore();
 					}
-					if (activeThing == player && player.canMoveTo(gridX, gridY)) {
+					else if (activeThing == player && player.canMoveTo(gridX, gridY)) {
 						// move player
 						player.startMoveAnim({x: gridX - player.x, y: gridY - player.y});
 						getPieceAtGridCoord(gridX, gridY).addSurroundingPieces();

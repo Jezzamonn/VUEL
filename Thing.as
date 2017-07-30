@@ -128,7 +128,12 @@
 		}
 
 		public function update():void {
-			frameCount ++;
+			if (dead) {
+				frameCount = 0;
+			}
+			else {
+				frameCount ++;
+			}
 			if (animating) {
 				animAmt += 0.2;
 				if (animAmt >= 1) {

@@ -49,8 +49,8 @@
 
 			var spawnChance:Number = 0.05 + 0.001 * dist;
 
-			trace("Difficulty: " + difficulty);
-			trace("Spawn Chance: " + spawnChance)
+			//trace("Difficulty: " + difficulty);
+			//trace("Spawn Chance: " + spawnChance)
 
 			for (var y:int = 0; y < HEIGHT; y ++) {
 				for (var x:int = 0; x < WIDTH; x ++) {

@@ -52,6 +52,11 @@
 			}
 			level.activeIndex ++;
 			super.doMove();
+
+			if (power <= 0) {
+				dead = true;
+				SoundManager.setSong("bitcrush");
+			}
 		}
 
 		public override function maybeRenderMoves(context:BitmapData, xOffset:int = 0, yOffset:int = 0):void {

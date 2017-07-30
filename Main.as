@@ -12,6 +12,8 @@
 	import flash.display.StageAlign;
 	import flash.events.KeyboardEvent;
 	import flash.ui.Keyboard;
+	import flash.media.SoundMixer;
+	import flash.media.SoundTransform;
 	
 	
 	public class Main extends MovieClip {
@@ -23,6 +25,8 @@
 		public var bitmap:Bitmap;
 		public var bitmapData:BitmapData;
 		public var scale:Number;
+
+		public var muted:Boolean = false;
 		
 		public var level:Level;
 		
@@ -48,7 +52,7 @@
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 
 			SoundManager.init();
-			SoundManager.playSong();
+			SoundManager.startSong();
 		}
 		
 		public function onResize(evt:Event = null):void {
@@ -88,6 +92,10 @@
 			switch (evt.keyCode) {
 				case Keyboard.R:
 					level.regen();
+					break;
+				case Keyboard.M:
+					muted = !muted;
+					SoundMixer.soundTransform = new SoundTransform(muted ? 0 : 1);
 					break;
 			}
 		}
