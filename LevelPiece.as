@@ -1,16 +1,26 @@
-package  {
+﻿package  {
+	
+	import com.gskinner.utils.Rndm;
 	
 	public class LevelPiece {
 
 		public static const WIDTH:int = 10;
 		public static const HEIGHT:int = 10;
 
+		public var level:Level;
+		public var x:int;
+		public var y:int;
+
 		public var map:Array;
 		public var thingMap:Array;
 
 		public var active:Boolean = false;
 
-		public function LevelPiece() {
+		public function LevelPiece(level:Level, x:int, y:int) {
+			this.level = level;
+			this.x = x;
+			this.y = y;
+
 			map = [];
 			thingMap = [];
 
@@ -26,7 +36,7 @@ package  {
 					}
 
 					if (Rndm.boolean(0.2)) {
-						addThing(new Enemy(this), x, y);
+						level.setThingAt(new Enemy(level), x, y);
 					}
 				}
 			}

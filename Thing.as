@@ -56,7 +56,7 @@
 		}
 		
 		public function moveTo(x:int, y:int):void {
-			level.setThingPos(this, x, y);
+			level.setThingAt(this, x, y);
 		}
 		
 		public function canMoveTo(x:int, y:int):Boolean {

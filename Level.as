@@ -25,7 +25,6 @@
 			return _misc;
 		}
 
-
 		public static const GRID_SIZE:int = 20;
 		
 		public static const WIDTH:int = 9;
@@ -42,11 +41,14 @@
 			return Math.floor(camY - Main.WIDTH / 2);
 		}
 		
-		public var map:Array;
-		public var thingMap:Array;
-
 		public var player:Player;
 
+		// 2D array of pieces
+		public var pieces:Array;
+		public var piecesLeft:int = 0;
+		public var piecesTop:int = 0;
+		public var piecesWidth:int = 1;
+		public var piecesHeight:int = 1;
 		public var things:Array;
 
 		private var _activeIndex:int = 0;
@@ -93,26 +95,11 @@
 		}
 
 		public function regen():void {
-			map = [];
-			thingMap = [];
+			pieces = [[null]];
+			addLevelPiece(0, 0);
+
 			things = [];
 
-			for (var y:int = 0; y < HEIGHT; y ++) {
-				map[y] = [];
-				thingMap[y] = [];
-				for (var x:int = 0; x < WIDTH; x ++) {
-					map[y][x] = 0;
-					thingMap[y][x] = null;
-
-					if (Rndm.boolean(0.7)) {
-						map[y][x] = 1;
-						if (Rndm.boolean(0.15)) {
-							addThing(Enemy.randomEnemy(this), x, y);
-						}
-					}
-				}
-			}
-			
 			player = new Player(this); 
 			var playerX:int = 0;
 			var playerY:int = 0;
@@ -121,80 +108,122 @@
 				playerY = Rndm.integer(HEIGHT);
 			}
 			while (!validSquare(playerX, playerY));
-			addThing(player, playerX, playerY);
+			setThingAt(player, playerX, playerY);
 			activeThing = player;
 			
 			batteryIcon.player = player;
 		}
 
+		public function addLevelPiece(x:int, y:int):void {
+			var row:*;
+			var newRow:Array;
+			var i:int;
+
+			while (x < piecesLeft) {
+				// Add left column
+				for each (row in pieces) {
+					row.unshift(null);
+				}
+				piecesLeft --;
+			}
+			while (x >= piecesLeft + piecesWidth) {
+				// Add right column
+				for each (row in pieces) {
+					row.push(null);
+				}
+				piecesWidth ++;
+			}
+
+			while (y < piecesTop) {
+				// Add top row
+				newRow = [];
+				for (i = 0; i < piecesWidth; i ++) {
+					newRow.push(null);
+				}
+				pieces.unshift(newRow);
+				piecesTop --;
+			}
+			while (y >= piecesTop + piecesHeight) {
+				// Add bottom row
+				newRow = [];
+				for (i = 0; i < piecesWidth; i ++) {
+					newRow.push(null);
+				}
+				pieces.push(newRow);
+				piecesHeight ++;
+			}
+
+			// TODO: Set this properly?
+			pieces[y + piecesTop][x + piecesLeft] = new LevelPiece(this, x, y);
+		}
+
+		public function getPieceAtPieceCoord(x:int, y:int):LevelPiece {
+			if (x < piecesLeft || y < piecesTop || x >= piecesLeft + piecesWidth || y >= piecesTop + piecesHeight) {
+				return null;
+			}
+			return pieces[y + piecesTop][x + piecesLeft];
+		}
+
+		public function getPieceAtGridCoord(x:int, y:int):LevelPiece {
+			var pieceX:int = Math.floor(x / LevelPiece.WIDTH);
+			var pieceY:int = Math.floor(y / LevelPiece.HEIGHT);
+
+			return getPieceAtPieceCoord(pieceX, pieceY);
+		}
+
 		public function getTileAt(x:int, y:int):int {
-			if (x < 0 || y < 0 || x >= WIDTH || y >= HEIGHT) {
+			var piece:LevelPiece = getPieceAtGridCoord(x, y);
+			if (piece == null) {
 				return 0;
 			}
-			return map[y][x];
+
+			var relX:int = Util.absMod(x, LevelPiece.WIDTH);
+			var relY:int = Util.absMod(y, LevelPiece.HEIGHT);
+
+			return piece.map[relY][relX];
 		}
 
 		public function getThingAt(x:int, y:int):Thing {
-			if (x < 0 || y < 0 || x >= WIDTH || y >= HEIGHT) {
+			var piece:LevelPiece = getPieceAtGridCoord(x, y);
+			if (piece == null) {
 				return null;
 			}
-			return thingMap[y][x];
+
+			var relX:int = Util.absMod(x, LevelPiece.WIDTH);
+			var relY:int = Util.absMod(y, LevelPiece.HEIGHT);
+
+			return piece.thingMap[relY][relX];
+		}
+
+		public function setThingAt(thing:Thing, x:int, y:int):void {
+			var piece:LevelPiece = getPieceAtGridCoord(x, y);
+			if (piece == null) {
+				return;
+			}
+
+			thing.x = x;
+			thing.y = y;
+			var relX:int = Util.absMod(x, LevelPiece.WIDTH);
+			var relY:int = Util.absMod(y, LevelPiece.HEIGHT);
+			piece.thingMap[relY][relX] = thing;
 		}
 
 		
 		public function validSquare(x:int, y:int):Boolean {
-			if (x < 0 || y < 0 || x >= WIDTH || y >= HEIGHT) {
-				return false;
-			}
-			return !!map[y][x];
+			return !!getTileAt(x, y);
 		}
 
 		// really just has anything but player
 		public function hasEnemy(x:int, y:int, ignore:Array = null):Boolean {
-			if (x < 0 || y < 0 || x >= WIDTH || y >= HEIGHT) {
-				return false;
-			}
 			if (ignore == null) ignore = [];
 
-			for each (var thing:* in ignore) {
-				if (thingMap[y][x] == thing) {
+			var thing:Thing = getThingAt(x, y);
+			for each (var ignoreThing:* in ignore) {
+				if (thing == ignoreThing) {
 					return false;
 				}
 			}
-			return !!thingMap[y][x];
-		}
-
-		public function addThing(thing:Thing, x:int, y:int):void {
-			thing.x = x;
-			thing.y = y;
-			if (thingMap[y][x]) {
-				removeThing(thingMap[y][x]);
-			}
-			thingMap[y][x] = thing;
-			things.push(thing);
-		}
-
-		public function removeThing(thing:Thing):void {
-			var index:int = things.indexOf(thing);
-			if (things[index] === player) {
-			}
-			if (activeIndex == index) {
-				activeIndex --;
-			}
-			things.splice(index, 1);
-			if (activeIndex > index) {
-				_activeIndex --;
-			}
-		}
-
-		public function setThingPos(thing:Thing, x:int, y:int):void {
-			if (thingMap[y][x] && thingMap[y][x] !== thing) {
-				removeThing(thingMap[y][x]);
-			}
-			thingMap[thing.y][thing.x] = null;
-			thing.x = x;
-			thing.y = y;
-			thingMap[y][x] = thing;
+			return !!thing;
 		}
 
 		public function update():void {
@@ -221,12 +250,12 @@
 					break;
 			}
 
-			desiredCamX = player.centerX;
-			desiredCamY = player.centerY;
+			//desiredCamX = player.centerX;
+			//desiredCamY = player.centerY;
 			
 			// update cam
-			camX += (desiredCamX - camX) / 10;
-			camY += (desiredCamY - camY) / 10;
+			//camX += (desiredCamX - camX) / 10;
+			//camY += (desiredCamY - camY) / 10;
 		}
 
 		public function onMouseDown(x:Number, y:Number):void {
