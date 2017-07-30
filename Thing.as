@@ -11,6 +11,11 @@
 		// In terms of the grid (?)
 		public var x:int;
 		public var y:int;
+
+		public var animating:Boolean = false;
+		public var animAmt:Number = 0;
+		public var nextX:int;
+		public var nextY:int;
 		
 		public function get centerX():int {
 			return (x + 0.5) * Level.GRID_SIZE;
@@ -38,21 +43,36 @@
 			];
 		}
 
-		public function move():void {
+		public function startMoveAnim():void {
+			var move:Object = pickMove();
+			if (move == null) {
+				return;
+			}
+
+			this.nextX = x + move.x;
+			this.nextY = y + move.y;
+			animating = true;
+		}
+
+		public function pickMove():Object {
 			var movesCopy:Array = moves.slice();
 			while (movesCopy.length > 0) {
 				var rIndex:int = Rndm.integer(movesCopy.length);
 
 				var move:Object = movesCopy[rIndex];
 				if (level.validSquare(x + move.x, y + move.y)) {
-					moveTo(x + move.x, y + move.y);
-					return;
+					return move;
 				}
 				else {
 					movesCopy.splice(rIndex, 1);
 				}
 			}
-			trace("can't move :)")
+			trace("can't move :')")
+			return null;
+		}
+
+		public function doMove():void {
+			moveTo(nextX, nextY);
 		}
 		
 		public function moveTo(x:int, y:int):void {
@@ -70,6 +90,18 @@
 				}
 			}
 			return false;
+		}
+
+		public function update():void {
+			if (animating) {
+				animAmt += 0.2;
+				if (animAmt >= 1) {
+					// actually do the move here.
+					doMove();
+					animAmt = 0;
+					animating = false;
+				}
+			}
 		}
 		
 		public function render(context:BitmapData, xOffset:int = 0, yOffset:int = 0):void {
@@ -94,9 +126,21 @@
 				Player.image,
 				new Rectangle(20 * renderOffset, 0, 20, 20),
 				new Point(
-					x * Level.GRID_SIZE - xOffset,
-					y * Level.GRID_SIZE - yOffset),
+					getAnimX() - xOffset,
+					getAnimY() - yOffset),
 				null, null, true);
+		}
+
+		public function getAnimX():int {
+			var xPos:Number = x * (1 - animAmt) + nextX * animAmt;
+			return Math.round(xPos * Level.GRID_SIZE);
+		}
+
+		public function getAnimY():int {
+			var baseY:Number = y * (1 - animAmt) + nextY * animAmt;
+			var jumpAmt:Number = 4 * animAmt * (1 - animAmt);
+			var jumpY:Number = -0.5 * jumpAmt;
+			return Math.round((baseY + jumpY) * Level.GRID_SIZE);
 		}
 		
 		public function maybeRenderMoves(context:BitmapData, xOffset:int = 0, yOffset:int = 0):void {

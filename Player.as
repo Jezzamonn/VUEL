@@ -37,16 +37,22 @@
 			]
 		}
 
-		public override function moveTo(x:int, y:int):void {
+		public override function startMoveAnim():void {
+			animating = true;
+		}
+
+		public override function doMove():void {
 			// assume this move is ok
-			if (this.x != x || this.y != y) {
+			if (x != nextX || y != nextY) {
 				power --;
 			}
-			var thing:Thing = level.getThingAt(x, y);
+			var thing:Thing = level.getThingAt(nextX, nextY);
 			if (thing && thing !== this) {
 				power = 4;
 			}
-			super.moveTo(x, y);
+			level.getPieceAtGridCoord(nextX, nextX).addSurroundingPieces();
+			level.activeIndex ++;
+			super.doMove();
 		}
 
 		public override function maybeRenderMoves(context:BitmapData, xOffset:int = 0, yOffset:int = 0):void {

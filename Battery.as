@@ -6,11 +6,10 @@ package  {
 			super(level);
 
 			renderOffset = 4;
+		}
 
-			moves = [
-				{x: 0, y: 0},
-			];
-
+		public override function pickMove():Object {
+			return null;
 		}
 		
 	}

@@ -259,6 +259,7 @@
 		}
 
 		public function update():void {
+			var thing:*;
 			count ++;
 			switch (state) {
 				case STATE_IDLE:
@@ -271,17 +272,33 @@
 					}
 					else {
 						for (var i:int = 0; i < 4; i ++) {
-							activeThing.move();
+							activeThing.startMoveAnim();
 							activeIndex ++;
 							count = 0;
 
-							if (activeThing === player) break;
+							if (activeThing === player) {
+								state = STATE_ANIM;
+								break;
+							}
 						}
 					}
 					break;
 				case STATE_ANIM:
-					// wait for anim?
+					var somethingAnimating:Boolean = false;
+					for each (thing in things) {
+						if (thing.animating) {
+							somethingAnimating = true;
+							break;
+						}
+					}
+					if (!somethingAnimating) {
+						state = STATE_MOVE;
+					}
 					break;
+			}
+
+			for each (thing in things) {
+				thing.update();
 			}
 
 			desiredCamX = player.centerX;
@@ -300,9 +317,10 @@
 			var gridY:int = Math.floor(localY / GRID_SIZE);
 			
 			if (state == STATE_MOVE && activeThing == player && player.canMoveTo(gridX, gridY)) {
-				player.moveTo(gridX, gridY);
-				getPieceAtGridCoord(gridX, gridY).addSurroundingPieces();
-				activeIndex ++;
+				player.nextX = gridX;
+				player.nextY = gridY;
+				player.startMoveAnim();
+				state = STATE_ANIM;
 			}
 		}
 

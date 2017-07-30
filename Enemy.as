@@ -27,12 +27,12 @@
 			super(level);
 		}
 		
-		public override function move():void {
+		public override function pickMove():Object {
 			var xDiff:int = x - level.player.x;
 			var yDiff:int = y - level.player.y;
 			var dist:int = Math.sqrt(xDiff * xDiff + yDiff * yDiff);
 			if (dist > 7) { // don't move if too far away
-				return;
+				return null;
 			}
 
 			
@@ -54,13 +54,7 @@
 					bestMove = move;
 				}
 			}
-			//trace(bestDist);
-			if (bestMove) {
-				moveTo(x + bestMove.x, y + bestMove.y);
-			}
-			else {
-				// can't move??? Oh no
-			}
+			return bestMove;
 		}
 
 	}
