@@ -37,6 +37,9 @@
 
 		public var renderOffset:int = 1;
 
+		public var name:String = "Thing";
+		public var description:String = "This is just a thing. Carry on."
+
 		public function Thing(level:Level) {
 			this.level = level;
 

@@ -18,6 +18,8 @@ package  {
 				{x:  0, y: -1},
 			];
 
+			name = "TV";
+			description = "Moves fast horizontally, but has difficulty getting you if you're too close."
 		}
 		
 	}

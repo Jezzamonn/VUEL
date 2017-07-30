@@ -21,6 +21,9 @@ package  {
 				{x: -2, y: -1},
 			];
 
+			name = "Duck";
+			description = "This is duck. Carry on."
+
 		}
 		
 	}

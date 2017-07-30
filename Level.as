@@ -6,7 +6,7 @@
 	
 	public class Level {
 		
-		public static const COLORS:Array = [0x151729, 0x343857, 0x555976, 0x818396];
+		public static const COLORS:Array = [0x151729, 0x343857, 0x555976, 0x818396, 0x9fa9b3, 0xbfc9cd];
 
 		[Embed(source = "graphics/tiles.png")]
 		private static const TILES_CLASS:Class;
@@ -84,6 +84,8 @@
 
 		public var batteryIcon:BatteryIcon;
 		public var pointsDisplay:TextBox;
+		public var hoverText:TextBox;
+
 		public var title:Title;
 		public var howTo:HowTo;
 
@@ -115,6 +117,10 @@
 			pointsDisplay.x = 0;
 			pointsDisplay.y = 0;
 			pointsDisplay.textField.text = "0";
+
+			hoverText = new TextBox("m3x6", COLORS[4], 16);
+			hoverText.textField.width += 2;
+			hoverText.setBg(COLORS[0], 0.4);
 
 			title = new Title();
 			howTo = new HowTo();
@@ -387,6 +393,18 @@
 			if (thing) {
 				mouseOverred = thing;
 				mouseOverred.showMoves = true;
+
+			}
+
+
+			if (mouseOverred && mouseOverred.name) {
+				hoverText.textField.text = mouseOverred.name + "\n" + mouseOverred.description;
+				hoverText.redrawBg();
+				hoverText.y = Main.HEIGHT - hoverText.textField.height;
+			}
+			else {
+				hoverText.textField.text = "";
+				hoverText.clearBg();
 			}
 		}
 
@@ -408,6 +426,10 @@
 					
 					batteryIcon.render(context);
 					pointsDisplay.render(context);
+
+					if (mouseOverred) {
+						hoverText.render(context);
+					}
 					break;
 			}
 		}

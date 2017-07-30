@@ -15,6 +15,8 @@ package  {
 				{x:  0, y:  1},
 			];
 
+			name = "Toaster";
+			description = "Tends to get stuck in small places, like the very toast it once used to create."
 		}
 		
 	}

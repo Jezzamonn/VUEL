@@ -35,6 +35,9 @@
 				{x:  0, y: -2},
 				{x:  0, y:  2},
 			]
+
+			name = null;
+			description = null;
 		}
 
 		public override function doMove():void {

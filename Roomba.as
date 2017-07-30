@@ -16,6 +16,9 @@ package  {
 				{x: -1, y: -1},
 			];
 
+			name = "Roomba"
+			description = "Decades of cleaning dust and hair has filled this roomba with malice. Has a penchant for diagonals."
+
 		}
 		
 	}

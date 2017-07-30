@@ -7,6 +7,7 @@
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.display.StageScaleMode;
+	import flash.display.StageQuality;
 	import flash.display.StageAlign;
 	import flash.events.KeyboardEvent;
 	import flash.ui.Keyboard;
@@ -26,6 +27,7 @@
 		public function Main() {
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.align = StageAlign.TOP_LEFT;
+			stage.quality = StageQuality.LOW;
 			
 			bitmapData = new BitmapData(WIDTH, HEIGHT, false, 0);
 			bitmap = new Bitmap(bitmapData);
