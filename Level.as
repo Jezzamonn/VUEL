@@ -88,6 +88,7 @@
 
 		public var title:Title;
 		public var howTo:HowTo;
+		public var buyPage:BuyPage;
 
 		// ========================= STATE =========================
 
@@ -110,6 +111,7 @@
 		public static const STATE_MOVE:int = 1;
 		public static const STATE_ANIM:int = 2;
 		public static const STATE_HOWTO:int = 3;
+		public static const STATE_BUYING:int = 4;
 
 		// ========================= CONSTRUCTOR AND FUNCTIONS =========================
 
@@ -126,6 +128,7 @@
 
 			title = new Title();
 			howTo = new HowTo();
+			buyPage = new BuyPage();
 			
 			regen();
 		}
@@ -335,6 +338,9 @@
 						state = STATE_MOVE;
 					}
 					break;
+				case STATE_BUYING:
+					buyPage.update();
+					break;
 			}
 
 			for each (thing in things) {
@@ -360,10 +366,13 @@
 
 			switch (state) {
 				case STATE_TITLE:
-					state = STATE_HOWTO;
+					state = STATE_BUYING;//STATE_HOWTO;
 					break;
 				case STATE_HOWTO:
 					state = STATE_MOVE;
+					break;
+				case STATE_BUYING:
+					buyPage.onMouseDown(x, y);
 					break;
 				case STATE_MOVE:
 					if (player.dead) {
@@ -380,33 +389,40 @@
 		}
 
 		public function onMouseMove(x:Number, y:Number):void {
-			if (mouseOverred) {
-				mouseOverred.showMoves = false;
-			}
-			mouseOverred = null;
-			
-			var localX:int = x + xOffset;
-			var localY:int = y + yOffset;
+			switch (state) {
+				case STATE_BUYING:
+					buyPage.onMouseMove(x, y);
+					break;
+				default:
+					if (mouseOverred) {
+						mouseOverred.showMoves = false;
+					}
+					mouseOverred = null;
+					
+					var localX:int = x + xOffset;
+					var localY:int = y + yOffset;
 
-			var gridX:int = Math.floor(localX / GRID_SIZE);
-			var gridY:int = Math.floor(localY / GRID_SIZE);
+					var gridX:int = Math.floor(localX / GRID_SIZE);
+					var gridY:int = Math.floor(localY / GRID_SIZE);
 
-			var thing:Thing = getThingAt(gridX, gridY);
-			if (thing) {
-				mouseOverred = thing;
-				mouseOverred.showMoves = true;
+					var thing:Thing = getThingAt(gridX, gridY);
+					if (thing) {
+						mouseOverred = thing;
+						mouseOverred.showMoves = true;
 
-			}
+					}
 
 
-			if (mouseOverred && mouseOverred.name) {
-				hoverText.textField.text = mouseOverred.name + "\n" + mouseOverred.description;
-				hoverText.redrawBg();
-				hoverText.y = Main.HEIGHT - hoverText.textField.height;
-			}
-			else {
-				hoverText.textField.text = "";
-				hoverText.clearBg();
+					if (mouseOverred && mouseOverred.name) {
+						hoverText.textField.text = mouseOverred.name + "\n" + mouseOverred.description;
+						hoverText.redrawBg();
+						hoverText.y = Main.HEIGHT - hoverText.textField.height;
+					}
+					else {
+						hoverText.textField.text = "";
+						hoverText.clearBg();
+					}
+					break;
 			}
 		}
 
@@ -419,6 +435,9 @@
 					break;
 				case STATE_HOWTO:
 					howTo.render(context);
+					break;
+				case STATE_BUYING:
+					buyPage.render(context);
 					break;
 				default:
 					context.fillRect(context.rect, COLORS[0]);

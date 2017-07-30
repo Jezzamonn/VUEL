@@ -186,7 +186,7 @@
 			var rect:Rectangle = new Rectangle(20, 0, 20, 20);
 			var point:Point = new Point();
 			for each (var move:* in moves) {
-				if (level.validSquare(x + move.x, y + move.y)) {
+				if (!level || level.validSquare(x + move.x, y + move.y)) {
 					point.x = (x + move.x) * Level.GRID_SIZE - xOffset;
 					point.y = (y + move.y) * Level.GRID_SIZE - yOffset;
 					context.copyPixels(Level.misc, rect, point, null, null, true);
