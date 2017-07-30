@@ -266,15 +266,17 @@
 					break;
 				case STATE_MOVE:
 					// pick ya move
-					if (activeThing == player) {
+					if (activeThing === player) {
 						// wait for the player to pick a move
 					}
 					else {
-						//if (count > 4) {
+						for (var i:int = 0; i < 4; i ++) {
 							activeThing.move();
 							activeIndex ++;
 							count = 0;
-						//}
+
+							if (activeThing === player) break;
+						}
 					}
 					break;
 				case STATE_ANIM:
