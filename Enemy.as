@@ -26,6 +26,16 @@
 		public function Enemy(level:Level) {
 			super(level);
 		}
+
+		public override function makeMoveSound():void {
+			var thing:Thing = level.getThingAt(nextX, nextY);
+			if (thing && thing === level.player) {
+				SoundManager.playSound("splode");
+			}
+			else {
+				SoundManager.playSound("hop");
+			}
+		}
 		
 		public override function pickMove():Object {
 			var xDiff:int = x - level.player.x;

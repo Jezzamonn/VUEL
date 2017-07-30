@@ -72,7 +72,12 @@
 		}
 
 		public function doMove():void {
+			makeMoveSound();
 			moveTo(nextX, nextY);
+		}
+
+		public function makeMoveSound():void {
+			SoundManager.playSound("hop");
 		}
 		
 		public function moveTo(x:int, y:int):void {

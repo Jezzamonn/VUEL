@@ -37,6 +37,16 @@
 			]
 		}
 
+		public override function makeMoveSound():void {
+			var thing:Thing = level.getThingAt(nextX, nextY);
+			if (thing && thing !== this) {
+				SoundManager.playSound("splode");
+			}
+			else {
+				SoundManager.playSound("hop");
+			}
+		}
+		
 		public override function startMoveAnim():void {
 			animating = true;
 		}
