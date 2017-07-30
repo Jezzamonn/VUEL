@@ -11,6 +11,13 @@
 		// In terms of the grid (?)
 		public var x:int;
 		public var y:int;
+		
+		public function get centerX():int {
+			return (x + 0.5) * Level.GRID_SIZE;
+		}
+		public function get centerY():int {
+			return (y + 0.5) * Level.GRID_SIZE;
+		}
 
 		// x y pairs
 		public var moves:Array;

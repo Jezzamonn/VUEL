@@ -36,10 +36,10 @@
 		public var desiredCamX:Number = 0;
 		public var desiredCamY:Number = 0;
 		public function get xOffset():int {
-			return Math.round(camX - Main.WIDTH / 2);
+			return Math.floor(camX - Main.WIDTH / 2);
 		}
 		public function get yOffset():int {
-			return Math.round(camY - Main.WIDTH / 2);
+			return Math.floor(camY - Main.WIDTH / 2);
 		}
 		
 		public var map:Array;
@@ -216,11 +216,18 @@
 					// wait for anim?
 					break;
 			}
+
+			desiredCamX = player.centerX;
+			desiredCamY = player.centerY;
+			
+			// update cam
+			camX += (desiredCamX - camX) / 10;
+			camY += (desiredCamY - camY) / 10;
 		}
 
 		public function onMouseDown(x:Number, y:Number):void {
 			var localX:int = x + xOffset;
-			var localY:int = y + yOffset
+			var localY:int = y + yOffset;
 
 			var gridX:int = Math.floor(localX / GRID_SIZE);
 			var gridY:int = Math.floor(localY / GRID_SIZE);
@@ -251,8 +258,6 @@
 		}
 
 		public function render(context:BitmapData):void {
-			var xOffset:int = camX - Main.WIDTH / 2;
-			var yOffset:int = camY - Main.HEIGHT / 2;
 			context.fillRect(context.rect, 0);
 			renderBg(context, xOffset, yOffset);
 			renderThings(context, xOffset, yOffset);
@@ -274,9 +279,9 @@
 			var rect:Rectangle = new Rectangle(0, 0, 20, 23);
 			var point:Point = new Point();
 			for (var y:int = 0; y < HEIGHT; y ++) {
-				point.y = y * GRID_SIZE - xOffset;
+				point.y = y * GRID_SIZE - yOffset;
 				for (var x:int = 0; x < WIDTH; x ++) {
-					point.x = x * GRID_SIZE - yOffset;
+					point.x = x * GRID_SIZE - xOffset;
 
 					if (getTileAt(x, y)) {
 						if (getTileAt(x, y+1)) {
