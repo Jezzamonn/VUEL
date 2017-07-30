@@ -78,6 +78,8 @@
 
 		public var mouseOverred:Thing = null;
 
+		public var batteryIcon:BatteryIcon;
+		
 		public var count:int = 0;
 		public var state:int = STATE_MOVE;
 
@@ -86,7 +88,7 @@
 		public static const STATE_ANIM:int = 2;
 
 		public function Level() {
-			// constructor code
+			batteryIcon = new BatteryIcon();
 			regen();
 		}
 
@@ -121,6 +123,8 @@
 			while (!validSquare(playerX, playerY));
 			addThing(player, playerX, playerY);
 			activeThing = player;
+			
+			batteryIcon.player = player;
 		}
 
 		public function getTileAt(x:int, y:int):int {
@@ -258,23 +262,26 @@
 		}
 
 		public function render(context:BitmapData):void {
-			context.fillRect(context.rect, 0);
+			context.fillRect(context.rect, 0x151729);
 			renderBg(context, xOffset, yOffset);
 			renderThings(context, xOffset, yOffset);
+			renderMoves(context, xOffset, yOffset);
+			
+			batteryIcon.render(context);
 		}
 		
 		public function renderThings(context:BitmapData, xOffset:int = 0, yOffset:int = 0):void {
 			for each (var thing:* in things) {
 				thing.render(context, xOffset, yOffset);
 			}
-			//for (var y:int = 0; y < HEIGHT; y ++) {
-			//	for (var x:int = 0; x < WIDTH; x ++) {
-			//		if (things[y][x]) {
-			//			things[y][x].render(context);
-			//		}
-			//	}
-			//}
 		}
+		
+		public function renderMoves(context:BitmapData, xOffset:int = 0, yOffset:int = 0):void {
+			for each (var thing:* in things) {
+				thing.maybeRenderMoves(context, xOffset, yOffset);
+			}
+		}
+		
 		public function renderBg(context:BitmapData, xOffset:int = 0, yOffset:int = 0):void {
 			var rect:Rectangle = new Rectangle(0, 0, 20, 23);
 			var point:Point = new Point();

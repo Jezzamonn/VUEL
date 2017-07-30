@@ -18,6 +18,8 @@
 		public function Player(level:Level) {
 			super(level);
 
+			power = 3;
+
 			renderOffset = 0;
 
 			moves = [

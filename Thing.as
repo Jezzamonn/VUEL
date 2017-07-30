@@ -73,9 +73,6 @@
 		
 		public function render(context:BitmapData, xOffset:int = 0, yOffset:int = 0):void {
 			renderSelf(context, xOffset, yOffset);
-			if (active || showMoves) {
-				renderMoves(context, xOffset, yOffset);
-			}
 		}
 
 		public function renderSquare(context:BitmapData, x:int, y:int, color:int, edge:int = 0, xOffset:int = 0, yOffset:int = 0):void {
@@ -99,6 +96,12 @@
 					x * Level.GRID_SIZE - xOffset,
 					y * Level.GRID_SIZE - yOffset),
 				null, null, true);
+		}
+		
+		public function maybeRenderMoves(context:BitmapData, xOffset:int = 0, yOffset:int = 0):void {
+			if (active || showMoves) {
+				renderMoves(context, xOffset, yOffset);
+			}
 		}
 
 		public function renderMoves(context:BitmapData, xOffset:int = 0, yOffset:int = 0):void {
