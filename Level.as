@@ -101,6 +101,8 @@
 				pointsDisplay.textField.text = value.toString();
 			}
 		}
+		public var totalPoints:int = 0;
+		
 		public var count:int = 0;
 		public var state:int = STATE_TITLE;
 

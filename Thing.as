@@ -36,6 +36,7 @@
 		public var showMoves:Boolean = false;
 
 		public var renderOffset:int = 1;
+		public var frameCount:int = 0;
 
 		public var name:String = "Thing";
 		public var description:String = "This is just a thing. Carry on."
@@ -46,6 +47,8 @@
 			moves = [
 				{x: 0, y: 0},
 			];
+
+			frameCount = Rndm.integer(8 * 3);
 		}
 
 		public function startMoveAnim(move:Object = null):void {
@@ -118,6 +121,7 @@
 		}
 
 		public function update():void {
+			frameCount ++;
 			if (animating) {
 				animAmt += 0.2;
 				if (animAmt >= 1) {
@@ -127,6 +131,10 @@
 					animating = false;
 				}
 			}
+		}
+
+		public function get frame():int {
+			return (frameCount / 3) % 3
 		}
 		
 		public function render(context:BitmapData, xOffset:int = 0, yOffset:int = 0):void {
@@ -149,7 +157,7 @@
 			//renderSquare(context, x, y, 0x990099, 1);
 			context.copyPixels(
 				Player.image,
-				new Rectangle(20 * renderOffset, 0, 20, 20),
+				new Rectangle(20 * renderOffset, 20 * frame, 20, 20),
 				new Point(
 					getAnimX() - xOffset,
 					getAnimY() - yOffset),
