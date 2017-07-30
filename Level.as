@@ -206,7 +206,7 @@
 				case STATE_MOVE:
 					// pick ya move
 					if (activeThing == player) {
-						// pick the player move
+						// wait for the player to pick a move
 					}
 					else {
 						//if (count > 4) {

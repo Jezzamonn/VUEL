@@ -37,6 +37,19 @@
 			]
 		}
 
+		public override function moveTo(x:int, y:int):void {
+			// assume this move is ok
+			power --;
+			var thing:Thing = level.getThingAt(x, y);
+			if (thing) {
+				power += thing.power;
+				if (power > 3) {
+					power = 3;
+				}
+			}
+			super.moveTo(x, y);
+		}
+
 		public override function renderMoves(context:BitmapData, xOffset:int = 0, yOffset:int = 0):void {
 			var rect:Rectangle = new Rectangle(0, 0, 20, 20);
 			var point:Point = new Point();

@@ -22,7 +22,7 @@
 		// x y pairs
 		public var moves:Array;
 
-		public var power:int;
+		public var power:int = 3;
 
 		public var active:Boolean = false;
 		public var disabled:Boolean = false;
