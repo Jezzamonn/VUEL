@@ -8,14 +8,14 @@
 		public function HowTo() {
 			textBox = new TextBox("nokia", Level.COLORS[3], 8);
 			textBox.textField.text = 
-				"How to:\n\n" +
+				"How to survive in the year 2196:\n\n" +
 				"- Click a square to move\n\n" +
 				"- Click yourself to wait\n\n" +
-				"- Stomp things to take their battery\n\n" +
-				"- Don't run out of battery\n\n" +
+				"- Stomp things to take their power\n\n" +
+				"- Don't run out of power\n\n" +
 				"- Don't get stomped";
 			textBox.y = 0.2 * Main.HEIGHT;
-			textBox.x = 0.05 * Main.WIDTH;
+			textBox.x = 2;
 		}
 		
 		public function render(context:BitmapData):void {
