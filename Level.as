@@ -149,6 +149,7 @@
 			player = new Player(this);
 			if (oldPlayer) {
 				player.moves = oldPlayer.moves;
+				player.renderOffset = oldPlayer.renderOffset;
 			}
 
 			var playerX:int = 0;

@@ -14,6 +14,16 @@
 			}
 			return _image;
 		}
+		[Embed(source = "graphics/player.png")]
+		private static const PLAYER_IMAGE_CLASS:Class;
+		private static var _playerImage:BitmapData;
+		public static function get playerImage():BitmapData {
+			if (!_playerImage) {
+				_playerImage = (new PLAYER_IMAGE_CLASS()).bitmapData;
+			}
+			return _playerImage;
+		}
+
 
 		public function Player(level:Level) {
 			super(level);
@@ -57,6 +67,16 @@
 				dead = true;
 				SoundManager.setSong("bitcrush");
 			}
+		}
+
+		public override function renderSelf(context:BitmapData, xOffset:int = 0, yOffset:int = 0):void {
+			context.copyPixels(
+				Player.playerImage,
+				new Rectangle(20 * renderOffset, 20 * frame, 20, 20),
+				new Point(
+					getAnimX() - xOffset,
+					getAnimY() - yOffset),
+				null, null, true);
 		}
 
 		public override function maybeRenderMoves(context:BitmapData, xOffset:int = 0, yOffset:int = 0):void {

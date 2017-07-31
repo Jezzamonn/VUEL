@@ -31,7 +31,8 @@
 				thing.y = 2 + 3 * (Math.floor(i / 2));
 				//thing.showMoves = true;
 				thing.active = false;
-				thing.description = "Excellent Eyebrows"
+				thing.description = "Excellent Eyebrows";
+				thing.renderOffset = i;
 				choices.push(thing);
 			}
 			choices[0].bought = true;
@@ -49,6 +50,7 @@
 				{x: -1, y: -1},
 			]
 			choices[1].cost = 20;
+
 			choices[2].moves = [
 				{x: 0, y: 0},
 
@@ -143,6 +145,7 @@
 					selectedThing.bought = true;
 
 					level.player.moves = selectedThing.moves;
+					level.player.renderOffset = selectedThing.renderOffset;
 					level.state = Level.STATE_MOVE;
 					level.regen();
 				}

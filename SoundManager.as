@@ -38,12 +38,14 @@
 		}
 
 		public static function onSongRepeat(evt:Event = null):void {
-			curSong.play(51, int.MAX_VALUE);
+			evt.currentTarget.removeEventListener(Event.SOUND_COMPLETE, onSongRepeat);
+			soundChannel = curSong.play(51, int.MAX_VALUE);
 		}
 
 		public static function setSong(name:String):void {
 			curSong = sounds[name];
 			var pos:int = soundChannel.position;
+			soundChannel.removeEventListener(Event.SOUND_COMPLETE, onSongRepeat);
 			soundChannel.stop();
 			if (name == "beat") {
 				pos %= 7111; // have to make it smaller to fit
