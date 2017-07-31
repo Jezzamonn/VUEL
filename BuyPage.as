@@ -13,6 +13,8 @@
 		public static const PAUSE_LENGTH:int = 4 * Main.SECONDS;
 		public var textPauseTimer:int = PAUSE_LENGTH;
 
+		public var beenHereBefore:Boolean = false;
+
 		public function BuyPage(level:Level) {
 			this.level = level;
 			
@@ -171,6 +173,10 @@
 		public function start():void {
 			// this is called before total points is updated.
 			pointsDisplay.textField.text = "$" + level.points + " + $" + level.totalPoints;
+			if (beenHereBefore) {
+				setText("Welcome back.");
+			}
+			textPauseTimer = PAUSE_LENGTH;
 		}
 
 		public function setText(value:String):void {
@@ -221,11 +227,14 @@
 				if (level.totalPoints >= selectedThing.cost) {
 					level.totalPoints -= selectedThing.cost;
 					selectedThing.bought = true;
+					
+					// START THE GAME
 
 					level.player.moves = selectedThing.moves;
 					level.player.renderOffset = selectedThing.renderOffset;
 					level.state = Level.STATE_MOVE;
 					level.regen();
+					SoundManager.setSong("song");
 				}
 				else {
 					setText("You don't have enough for that.")

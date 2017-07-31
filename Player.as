@@ -59,6 +59,12 @@
 			if (thing && thing !== this) {
 				power = 4;
 				level.points ++;
+				level.screenShakeAmt = 2;
+				level.screenShakeCount = 4;
+			}
+			else {
+				level.screenShakeAmt = 1;
+				level.screenShakeCount = 1;
 			}
 			level.activeIndex ++;
 			super.doMove();

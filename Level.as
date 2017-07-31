@@ -39,6 +39,9 @@
 		public function get yOffset():int {
 			return Math.floor(camY - Main.WIDTH / 2);
 		}
+
+		public var screenShakeCount:int = 0;
+		public var screenShakeAmt:int = 0;
 		
 		public var player:Player;
 
@@ -357,6 +360,12 @@
 				thing.update();
 			}
 
+			screenShakeCount --;
+			if (screenShakeCount < 0) {
+				screenShakeCount = 0;
+				screenShakeAmt = 0;
+			}
+
 			desiredCamX = player.centerX;
 			desiredCamY = player.centerY;
 			
@@ -457,6 +466,10 @@
 					buyPage.render(context);
 					break;
 				default:
+					var xOffset:int = this.xOffset + Rndm.integer(-screenShakeAmt, screenShakeAmt+1);
+					var yOffset:int = this.yOffset + Rndm.integer(-screenShakeAmt, screenShakeAmt+1);
+
+
 					context.fillRect(context.rect, COLORS[0]);
 					renderBg(context, xOffset, yOffset);
 					renderThings(context, xOffset, yOffset);
