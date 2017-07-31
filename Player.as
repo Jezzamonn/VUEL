@@ -82,6 +82,9 @@
 			if (power == 0) {
 				level.colorTransform = new ColorTransform(0.6, 0.6, 0.7);
 			}
+			else {
+				level.colorTransform = null;
+			}
 			
 			if (power <= 0) {
 				dead = true;
