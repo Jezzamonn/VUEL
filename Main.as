@@ -26,7 +26,8 @@
 		public var bitmapData:BitmapData;
 		public var scale:Number;
 
-		public var muted:Boolean = false;
+		public static var muted:Boolean = false;
+		public static var screenShake:Boolean = true;
 		
 		public var level:Level;
 		
@@ -96,6 +97,9 @@
 				case Keyboard.M:
 					muted = !muted;
 					SoundMixer.soundTransform = new SoundTransform(muted ? 0 : 1);
+					break;
+				case Keyboard.S:
+					screenShake = !screenShake;
 					break;
 			}
 		}

@@ -466,9 +466,13 @@
 					buyPage.render(context);
 					break;
 				default:
-					var xOffset:int = this.xOffset + Rndm.integer(-screenShakeAmt, screenShakeAmt+1);
-					var yOffset:int = this.yOffset + Rndm.integer(-screenShakeAmt, screenShakeAmt+1);
+					var xOffset:int = this.xOffset;
+					var yOffset:int = this.yOffset;
 
+					if (Main.screenShake) {
+						var xOffset:int = Rndm.integer(-screenShakeAmt, screenShakeAmt+1);
+						var yOffset:int = Rndm.integer(-screenShakeAmt, screenShakeAmt+1);
+					}
 
 					context.fillRect(context.rect, COLORS[0]);
 					renderBg(context, xOffset, yOffset);
