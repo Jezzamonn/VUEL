@@ -25,17 +25,24 @@
 			pointsDisplay.textField.text = "$0";
 
 			choices = [];
-			for (var i:int = 0; i < 4; i ++) {
+			for (var i:int = 0; i < 8; i ++) {
 				var thing:Player = new Player(null);
-				thing.x = 3 + 3 * (i % 2);
-				thing.y = 2 + 3 * (Math.floor(i / 2));
 				//thing.showMoves = true;
 				thing.active = false;
 				thing.description = "Excellent Eyebrows";
 				thing.renderOffset = i;
 				choices.push(thing);
 			}
+			for (var i:int = 0; i < 4; i ++) {
+				choices[i].y = 2 + i;
+				choices[i].x = 2 + (i + 1) % 2;
+
+				choices[i+4].y = 2 + i;
+				choices[i+4].x = 6 + i % 2;
+			}
 			choices[0].bought = true;
+			choices[0].description = "Pretty good eyebrows. 7/10";
+
 			choices[1].moves = [
 				{x: 0, y: 0},
 
@@ -50,6 +57,7 @@
 				{x: -1, y: -1},
 			]
 			choices[1].cost = 20;
+			choices[1].description = "Small eyebrows, but they're pretty good. 6/10";
 
 			choices[2].moves = [
 				{x: 0, y: 0},
@@ -64,13 +72,13 @@
 				{x: -2, y:  1},
 				{x: -2, y: -1},
 			];
-			choices[2].cost = 50;
+			choices[2].cost = 60;
+			choices[2].description = "No eyebrows? Disgusting. No rating.";
 
 			choices[3].moves = [
-				{x: 0, y: 0},
-
-				{x:  0, y:  -1},
-				{x:  0, y:  -2},
+				{x:  0, y:  0},
+				{x:  0, y: -1},
+				{x:  0, y: -2},
 
 				{x:  1, y:  0},
 				{x:  1, y:  1},
@@ -80,12 +88,82 @@
 				{x: -1, y:  1},
 				{x: -1, y:  2},
 			];
-			choices[3].cost = 60;
+			choices[3].cost = 50;
+			choices[3].description = "These eyebrows embody the spirit of anger. 8/10";
+
+			choices[4].moves = [
+				{x:  0, y:  0},
+
+				{x: -1, y:  0},
+				{x:  1, y:  0},
+				{x:  0, y: -1},
+				{x:  0, y:  1},
+
+				{x: -3, y:  0},
+				{x:  3, y:  0},
+				{x:  0, y: -3},
+				{x:  0, y:  3},
+			];
+			choices[4].cost = 70;
+			choices[4].description = "This robot conveys the feeling of worry using the power of its eyebrows. 8/10";
+
+			choices[5].moves = [
+				{x: 0, y: 0},
+
+				{x:  2, y:  0},
+				{x: -2, y:  0},
+				{x:  0, y:  2},
+				{x:  0, y: -2},
+				
+				{x:  2, y:  1},
+				{x: -2, y:  1},
+				{x:  1, y:  2},
+				{x:  1, y: -2},
+				
+				{x:  2, y: -1},
+				{x: -2, y: -1},
+				{x: -1, y:  2},
+				{x: -1, y: -2},
+				
+				{x:  2, y:  2},
+				{x: -2, y:  2},
+				{x:  2, y: -2},
+				{x: -2, y: -2},
+			];
+			choices[5].cost = 120;
+			choices[5].description = "Now those are some eyebrows I can get behind. 9/10";
+
+			choices[6].moves = [
+				{x: 0, y:  0},
+				{x: 0, y: -1},
+
+				{x:  1, y:  1},
+				{x: -1, y:  1},
+				{x:  1, y: -1},
+				{x: -1, y: -1},
+
+				{x:  2, y:  2},
+				{x: -2, y:  2},
+				{x:  2, y: -2},
+				{x: -2, y: -2},
+			];
+			choices[6].cost = 70;
+			choices[6].description = "Perpetually confused eyebrows. OK. 7/10";
+
+			choices[7].moves = [
+				{x: 0, y: 0},
+			];
+			choices[7].cost = 200;
+			choices[7].description = "Optimal eyebrows. Cannot get better than this. 11/10";
+				
+			var temp:int = choices[4].y;
+			choices[4].y = choices[6].y;
+			choices[6].y = temp;
 
 			// DEBUG:
-			for each (var choice:* in choices) {
-				choice.cost /= 10;
-			}
+			//for each (var choice:* in choices) {
+			//	choice.cost /= 10;
+			//}
 
 			setText("Interested in purchasing a new robot?")
 		}

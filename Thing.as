@@ -16,7 +16,7 @@
 		public var bought:Boolean = false;
 		public var cost:int = 0;
 		public function get costString():String {
-			return bought ? "bought" : "$" + cost;
+			return bought ? "Bought" : "$" + cost;
 		}
 
 		public var dead:Boolean = false;
@@ -46,7 +46,7 @@
 		public var frameCount:int = 0;
 
 		public var name:String = "Thing";
-		public var description:String = "This is just a thing. Carry on."
+		public var description:String = "This is just a thing."
 
 		public function Thing(level:Level) {
 			this.level = level;
