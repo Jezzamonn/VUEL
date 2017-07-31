@@ -79,7 +79,7 @@
 			if (power == 1) {
 				level.colorTransform = new ColorTransform(1, 0.9, 0.9);
 			}
-			if (power == 0) {
+			else if (power == 0) {
 				level.colorTransform = new ColorTransform(0.6, 0.6, 0.7);
 			}
 			else {
