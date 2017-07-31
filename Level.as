@@ -3,6 +3,7 @@
 	import flash.geom.Rectangle;
 	import flash.geom.Point;
 	import com.gskinner.utils.Rndm;
+	import flash.geom.ColorTransform;
 	
 	public class Level {
 		
@@ -42,6 +43,8 @@
 
 		public var screenShakeCount:int = 0;
 		public var screenShakeAmt:int = 0;
+
+		public var colorTransform:ColorTransform;
 		
 		public var player:Player;
 
@@ -139,6 +142,8 @@
 		public function regen():void {
 			points = 0;
 			things = [];
+
+			colorTransform = null
 
 			piecesLeft = 0;
 			piecesTop = 0;
@@ -292,9 +297,9 @@
 
 			if (thing === player) {
 				SoundManager.setSong("bitcrush");
+				colorTransform = new ColorTransform(0.6, 0.6, 0.7);
 			}
  		}
-
 
 		
 		public function validSquare(x:int, y:int):Boolean {
@@ -323,16 +328,18 @@
 					break;
 				case STATE_MOVE:
 					// pick ya move
-					if (activeThing === player) {
+					if (activeThing === player && !player.dead) {
 						// wait for the player to pick a move
 					}
 					else {
 						for (var i:int = 0; i < Math.ceil(things.length / 4); i ++) {
-							activeThing.startMoveAnim();
+							if (activeThing !== player) {
+								activeThing.startMoveAnim();
+							}
 							activeIndex ++;
 							count = 0;
 
-							if (activeThing === player) {
+							if (activeThing === player && !player.dead) {
 								state = STATE_ANIM;
 								break;
 							}
@@ -455,6 +462,8 @@
 		// ========================= RENDERING =========================
 
 		public function render(context:BitmapData):void {
+			context.fillRect(context.rect, COLORS[0]);
+
 			switch (state) {
 				case STATE_TITLE:
 					title.render(context);
@@ -470,11 +479,10 @@
 					var yOffset:int = this.yOffset;
 
 					if (Main.screenShake) {
-						var xOffset:int = Rndm.integer(-screenShakeAmt, screenShakeAmt+1);
-						var yOffset:int = Rndm.integer(-screenShakeAmt, screenShakeAmt+1);
+						xOffset += Rndm.integer(-screenShakeAmt, screenShakeAmt+1);
+						yOffset += Rndm.integer(-screenShakeAmt, screenShakeAmt+1);
 					}
 
-					context.fillRect(context.rect, COLORS[0]);
 					renderBg(context, xOffset, yOffset);
 					renderThings(context, xOffset, yOffset);
 					renderMoves(context, xOffset, yOffset);
@@ -484,6 +492,10 @@
 
 					if (mouseOverred) {
 						hoverText.render(context);
+					}
+
+					if (colorTransform) {
+						context.draw(context, null, colorTransform);
 					}
 					break;
 			}

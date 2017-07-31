@@ -2,6 +2,7 @@
 	import flash.display.BitmapData;
 	import flash.geom.Rectangle;
 	import flash.geom.Point;
+	import flash.geom.ColorTransform;
 	
 	public class Player extends Thing {
 
@@ -66,9 +67,22 @@
 				level.screenShakeAmt = 1;
 				level.screenShakeCount = 1;
 			}
+
 			level.activeIndex ++;
 			super.doMove();
+			
+			// fix a glitch
+			if (this === level.activeThing) {
+				level.activeIndex ++;
+			}
 
+			if (power == 1) {
+				level.colorTransform = new ColorTransform(1, 0.9, 0.9);
+			}
+			if (power == 0) {
+				level.colorTransform = new ColorTransform(0.6, 0.6, 0.7);
+			}
+			
 			if (power <= 0) {
 				dead = true;
 				SoundManager.setSong("bitcrush");
