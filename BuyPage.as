@@ -263,6 +263,7 @@
 				// do the buy
 				if (level.totalPoints >= selectedThing.cost) {
 					level.totalPoints -= selectedThing.cost;
+					selectedThing.cost = 0;
 					selectedThing.bought = true;
 					
 					// START THE GAME
