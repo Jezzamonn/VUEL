@@ -167,16 +167,16 @@
 			//	choice.cost /= 10;
 			//}
 
-			setText("Interested in purchasing a new robot?")
 		}
 
 		public function start():void {
 			// this is called before total points is updated.
 			pointsDisplay.textField.text = "$" + level.points + " + $" + level.totalPoints;
-			if (beenHereBefore) {
-				setText("Welcome back.");
+			if (!beenHereBefore) {
+				setText("Interested in purchasing a new robot?")
+				textPauseTimer = PAUSE_LENGTH;
+				beenHereBefore = true;
 			}
-			textPauseTimer = PAUSE_LENGTH;
 		}
 
 		public function setText(value:String):void {
