@@ -15,12 +15,18 @@
 		}
 		
 		public var clickToStart:TextBox;
+		public var byMe:TextBox;
 		
 		public function Title() {
-			clickToStart = new TextBox("nokia", Level.COLORS[2], 8, "center");
+			clickToStart = new TextBox("nokia", Level.COLORS[3], 8, "center");
 			clickToStart.textField.text = "CLICK TO START";
 			clickToStart.x = 0;
-			clickToStart.y = 0.8 * Main.HEIGHT;
+			clickToStart.y = 0.75 * Main.HEIGHT;
+
+			byMe = new TextBox("m3x6", Level.COLORS[2], 16, "center");
+			byMe.textField.text = "A game made for LD39 by @jezzamonn";
+			byMe.x = 0;
+			byMe.y = Main.HEIGHT - byMe.textField.height;
 		}
 		
 		public function update():void {
@@ -38,6 +44,7 @@
 				)
 			);
 			clickToStart.render(context);
+			byMe.render(context);
 		}
 
 	}
