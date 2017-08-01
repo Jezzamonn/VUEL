@@ -22,7 +22,7 @@ package  {
 			];
 
 			name = "Fridge";
-			description = "Someone one left its door open and it never truly forgave them."
+			description = "Someone once left its door open and it never truly forgave them."
 		}
 		
 	}
