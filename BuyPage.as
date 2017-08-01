@@ -1,7 +1,19 @@
 ﻿package  {
 	import flash.display.BitmapData;
+	import flash.geom.Rectangle;
+	import flash.geom.Point;
 	
 	public class BuyPage {
+
+		[Embed(source = "graphics/shoppie.png")]
+		private static const IMAGE_CLASS:Class;
+		private static var _image:BitmapData;
+		public static function get image():BitmapData {
+			if (!_image) {
+				_image = (new IMAGE_CLASS()).bitmapData;
+			}
+			return _image;
+		}
 
 		public var level:Level;
 		
@@ -15,11 +27,14 @@
 
 		public var beenHereBefore:Boolean = false;
 
+		public var shoppieTalkCount:int = 0;
+		public var shoppieEmotion:int = 0;
+
 		public function BuyPage(level:Level) {
 			this.level = level;
 			
 			textBox = new TextBox("m3x6", Level.COLORS[4], 16);
-			textBox.textField.width += 2;
+			textBox.textField.width = Main.WIDTH - 50;
 
 			pointsDisplay = new TextBox("nokia", Level.COLORS[1], 16, "right");
 			pointsDisplay.x = 0;
@@ -60,6 +75,7 @@
 			]
 			choices[1].cost = 20;
 			choices[1].description = "Small eyebrows, but they're pretty good. 6/10";
+			choices[1].reaction = 1;
 
 			choices[2].moves = [
 				{x: 0, y: 0},
@@ -76,6 +92,7 @@
 			];
 			choices[2].cost = 60;
 			choices[2].description = "No eyebrows? Disgusting. No rating.";
+			choices[2].reaction = 3;
 
 			choices[3].moves = [
 				{x:  0, y:  0},
@@ -151,12 +168,14 @@
 			];
 			choices[6].cost = 70;
 			choices[6].description = "Perpetually confused eyebrows. OK. 7/10";
+			choices[6].reaction = 1;
 
 			choices[7].moves = [
 				{x: 0, y: 0},
 			];
 			choices[7].cost = 200;
 			choices[7].description = "Optimal eyebrows. Cannot get better than this. 11/10";
+			choices[7].reaction = 2;
 				
 			var temp:int = choices[4].y;
 			choices[4].y = choices[6].y;
@@ -192,6 +211,13 @@
 			if (textPauseTimer <= 0) {
 				pointsDisplay.textField.text = "$" + level.totalPoints;
 			}
+
+			if (textBox.textField.text && textBox.textField.text.length > 0) {
+				shoppieTalkCount ++;
+			}
+			else {
+				shoppieTalkCount = 0;
+			}
 		}
 		
 		public function render(context:BitmapData):void {
@@ -205,6 +231,17 @@
 			for each (var choice:* in choices) {
 				choice.maybeRenderMoves(context);
 			}
+
+			// SHOPPIE
+			var rect:Rectangle = new Rectangle(0, 0, 50, 50);
+			rect.x = shoppieEmotion * rect.width;
+			rect.y = (Math.floor(shoppieTalkCount / 3) % 2) * rect.height;
+			
+			var point:Point = new Point();
+			point.x = Main.WIDTH - rect.width;
+			point.y = Main.HEIGHT - rect.height;
+			
+			context.copyPixels(image, rect, point, null, null, true);
 		}
 		
 		public function onMouseDown(x:Number, y:Number):void {
@@ -265,6 +302,7 @@
 			if (textPauseTimer <= 0) {
 				if (hoverThing) {
 					setText(hoverThing.costString + "\n" + hoverThing.description);
+					shoppieEmotion = hoverThing.reaction;
 				}
 				else {
 					setText("");

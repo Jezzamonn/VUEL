@@ -18,6 +18,8 @@
 		public function get costString():String {
 			return bought ? "Bought" : "$" + cost;
 		}
+		// how the shoppie will react
+		public var reaction:int = 0;
 
 		public var dead:Boolean = false;
 		public var animating:Boolean = false;
